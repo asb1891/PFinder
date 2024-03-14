@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Implement Firebase login functionality
+  const handleLogin = async () => {
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+    } catch (error) {
+      console.error(error)
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>Your Logo</Text>
+      <Text style={styles.logo}>PetSwipe</Text>
       <TextInput
         style={styles.input}
         onChangeText={setEmail}
