@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { FIREBASE_APP } from '../../database/firebase';
+import { FIREBASE_AUTH } from '../../database/firebase';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const auth = FIREBASE_APP;
+  const auth = FIREBASE_AUTH;
 
   const handleLogin = async () => {
     setLoading(true);
