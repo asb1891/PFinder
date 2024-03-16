@@ -1,19 +1,44 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { FIREBASE_APP } from '../../database/firebase';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const auth = FIREBASE_APP;
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      console.log(response);
     } catch (error) {
-      console.error(error)
+      console.log(error);
+      alert('Login Failed');
+    } finally {
+      setLoading(false);
     }
   };
+
+  const signUp = async () => {
+    setLoading(true);
+    try {
+      const response = await createUserWithEmailAndPassword(auth, email, password);
+      console.log(response);
+      alert('Sign Up Success');
+    } catch (error) {
+      console.log(error);
+      alert('Sign Up Failed' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+
 
   return (
     <View style={styles.container}>
@@ -33,16 +58,11 @@ const LoginScreen = ({ navigation }) => {
         secureTextEntry
       />
       <Button title="Login" onPress={handleLogin} />
-      <Text 
-        style={styles.forgotPassword}
-        onPress={() => navigation.navigate('ForgotPassword')}>
-        Forgot Password?
-      </Text>
-      <Text 
+      <Button 
+      title = "Create Account"
         style={styles.signUp}
-        onPress={() => navigation.navigate('SignUp')}>
-        Sign Up
-      </Text>
+        onPress={signUp}>
+      </Button>
     </View>
   );
 };
@@ -71,7 +91,7 @@ const styles = StyleSheet.create({
   },
   signUp: {
     marginTop: 10,
-    color: 'blue',
+    color: 'red'
   }
 });
 
