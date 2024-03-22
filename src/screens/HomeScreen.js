@@ -1,17 +1,12 @@
 import { View, Text, ScrollView } from'react-native';
 import React, { useEffect, useState } from 'react';
 import PetCard from './components/PetCard'
-// import { SafeAreaView } from 'react-native-safe-area-context';
-// import { Entypo, Ionicons } from '@expo/vector-icons';
-// import { useNavigation } from '@react-navigation/native';
-// import Swiper from 'react-native-deck-swiper';
-// import useAuth from '../../hooks/useAuth';
-// import tw from 'tailwind-react-native-classnames';
-
+import Swiper from 'react-native-deck-swiper';
 
 const HomeScreen = () => {
-const [pets, setPets] = useState([]);
+const [pets, setPets] = useState([]);//Create an array to hold the pets
 
+//Fetch the pets from the server
 useEffect(() => {
   const fetchPets = async () => {
     try {
