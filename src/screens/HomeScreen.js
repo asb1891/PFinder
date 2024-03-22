@@ -1,24 +1,39 @@
-import { View, Text, TouchableOpacity, Image } from'react-native';
-import React, { useRef } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Entypo, Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import Swiper from 'react-native-deck-swiper';
-import useAuth from '../../hooks/useAuth';
-import tw from 'tailwind-react-native-classnames';
+import { View, Text, ScrollView } from'react-native';
+import React, { useEffect, useState } from 'react';
+import PetCard from './components/PetCard'
+// import { SafeAreaView } from 'react-native-safe-area-context';
+// import { Entypo, Ionicons } from '@expo/vector-icons';
+// import { useNavigation } from '@react-navigation/native';
+// import Swiper from 'react-native-deck-swiper';
+// import useAuth from '../../hooks/useAuth';
+// import tw from 'tailwind-react-native-classnames';
+
 
 const HomeScreen = () => {
-    const { user , logOut} = useAuth();
-    const navigation = useNavigation();
-    const swipeRef = useRef();
+const [pets, setPets] = useState([]);
 
-    return (
-        <SafeAreaView style={tw.style("flex-1 mt-6")}>
-          <View style={tw.style("flex-row items-center justify-between px-5")}>
-         <Text>Petswipe!</Text>
-          </View>
-        </SafeAreaView>
-      );
-    };
+useEffect(() => {
+  const fetchPets = async () => {
+    try {
+      const response = await fetch('http://localhost:4000/api/pets');
+      const data = await response.json();
+      setPets(data);
+    }
+    catch (error) {
+      console.error('Error fetching pets: ', error);
+    }};
+    fetchPets();
+  }, []);
+
+  return (
+    <ScrollView>
+      {pets.length > 0 ? (
+        pets.map((pet) => <PetCard key={pet.id} pet={pet} />)
+      ) : (
+        <Text>Loading pets...</Text>
+      )}
+    </ScrollView>
+  );
+};
 
 export default HomeScreen;
