@@ -29,19 +29,41 @@ dotenv.config();
 
 const token = process.env.PETFINDER_TOKEN
 //Async function to handle the requests for the pet data
+// async function fetchAnimals(token, type) {
+//     const petResponse = await axios.get(`https://api.petfinder.com/v2/animals`, {
+//         headers: { Authorization: `Bearer ${token}` },
+//         params: { type }
+//     });
+//     //return the animal data
+//     return petResponse.data.animals;
+// }
+
 async function fetchAnimals(token, type) {
     const petResponse = await axios.get(`https://api.petfinder.com/v2/animals`, {
         headers: { Authorization: `Bearer ${token}` },
         params: { type }
     });
-    //return the animal data
-    return petResponse.data.animals;
+
+    // Filter out animals that have no photos
+    const animalsWithPhotos = petResponse.data.animals.filter(animal => animal.photos.length > 0);
+
+    // Map over the filtered animals to return only the necessary data
+    return animalsWithPhotos.map(animal => ({
+        id: animal.id,
+        type: animal.type,
+        name: animal.name,
+        species: animal.species,
+        age: animal.age,
+        gender: animal.gender,
+        photos: animal.photos,
+        contact: animal.contact,
+    }));
 }
 //Controller function to handle requests for pet data
 export const getPets = async (req, res) => {
     try {
         console.log('Bearer Token:', token);
-        const type = req.query.type || 'dog'; 
+        const type = req.query.type || 'dog' && 'cat'; 
         const animals = await fetchAnimals(token, type);
 
         res.json(animals);
