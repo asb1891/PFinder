@@ -1,6 +1,10 @@
 import React, {useState, useEffect } from 'react';
 import {View, Text, Image, StyleSheet, ScrollView} from'react-native';
+import Swiper from'react-native-deck-swiper';
 
+
+//Creating a PetCard component for each pet in the pets array
+//Defines information about each Pet
 const PetCard = ({ pet }) => {
     return (
         <View style={styles.card}>
@@ -17,27 +21,28 @@ const PetCard = ({ pet }) => {
         margin: 10,
         borderWidth: 1,
         borderColor: '#ddd',
-        padding: 10,
+        padding: 5,
         borderRadius: 8,
         backgroundColor: '#fff',
         shadowColor: '#000',
         shadowOpacity: 0.1,
-        shadowRadius: 5,
-        elevation: 3,
+        shadowRadius: 2,
+        elevation: 2,
       },
       image: {
         width: '100%',
-        height: 200,
+        height: 500,
         borderRadius: 8,
       },
       text: {
         marginTop: 5,
       },
     });
-    
+
+    //Creating a PetSwiper component to display the pets in a swipeable deck
     const PetSwiper = () => {
       const [pets, setPets] = useState([]);
-
+      //Fetch the pets from the server
       useEffect(() => {
         const fetchPets = async () => {
           try {
@@ -52,11 +57,18 @@ const PetCard = ({ pet }) => {
         }, []);
 
         return (
-          <ScrollView>
-          <View>
-            {pets.map(pet => <PetCard key={pet.id} pet={pet} />)}
-          </View>
-          </ScrollView>
+          <View style={{ flex: 1 }}>
+          <Swiper
+            cards={pets}
+            renderCard={(card) => card ? <PetCard key={card.id} pet={card} /> : null} //Renders each card in the pets array
+            onSwiped={(cardIndex) => { console.log(cardIndex); }} //
+            onSwipedLeft={(cardIndex) => { console.log('Swiped left', cardIndex); }}
+            onSwipedRight={(cardIndex) => { console.log('Swiped right', cardIndex); }}
+            cardIndex={0}
+            backgroundColor={'#4FD0E9'}
+            stackSize={3}>
+          </Swiper>
+        </View>
         );
     };
 
