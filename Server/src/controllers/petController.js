@@ -57,6 +57,7 @@ async function fetchAnimals(token, type) {
         gender: animal.gender,
         photos: animal.photos,
         contact: animal.contact,
+        description: animal.description
     }));
 }
 //Controller function to handle requests for pet data
