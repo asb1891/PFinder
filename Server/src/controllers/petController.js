@@ -64,7 +64,7 @@ async function fetchAnimals(token, type) {
 export const getPets = async (req, res) => {
     try {
         console.log('Bearer Token:', token);
-        const type = req.query.type || 'dog' && 'cat'; 
+        const type = req.query.type || 'dog' && 'cat';
         const animals = await fetchAnimals(token, type);
 
         res.json(animals);
