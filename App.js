@@ -1,22 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack'
-import LoginScreen from './src/screens/LoginScreen';
-import SignUp from './src/screens/SignUp';
+import { NavigationContainer } from '@react-navigation/native';;
 import HomeScreen from './src/screens/HomeScreen';
+import SavedPets from './src/screens/SavedPets';
 import { AuthProvider } from './hooks/useAuth';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
       <AuthProvider>
-      <Stack.Navigator initialRouteName = 'Login' >
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name = "Home" component = {HomeScreen} />
-        <Stack.Screen name="SignUp" component={SignUp} />
-      </Stack.Navigator>
+        <Tab.Navigator>
+        <Tab.Screen name = "Home" component = {HomeScreen} />
+        <Tab.Screen name = "My Pets" component = {SavedPets} />
+      </Tab.Navigator>
       </AuthProvider>
     </NavigationContainer>
   );
