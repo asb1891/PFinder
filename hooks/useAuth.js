@@ -1,4 +1,4 @@
-import { onAuthStateChanged, signout, getAuth } from 'firebase/auth';
+import { onAuthStateChanged, signOut, getAuth } from 'firebase/auth';
 import { createContext, useContext, useEffect, useMemo, useState } from'react';
 import { FIREBASE_APP } from '../database/firebase';
 
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const logout = () => {
-        signout(auth).then(() => setUser(null));
+        signOut(auth).then(() => setUser(null));
     };
 
     const memoedValue = useMemo(() => {
