@@ -17,8 +17,7 @@ const LoginScreen = ({ navigation }) => {
       console.log(response);
       navigation.navigate('Home');
     } catch (error) {
-      console.log(error);
-      alert('Login Failed');
+      console.log(error);;
     } finally {
       setLoading(false);
     }
