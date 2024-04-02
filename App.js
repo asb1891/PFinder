@@ -28,6 +28,8 @@ const AppContent = () => {
   }
 
   return (
+    // If the user is not logged in, show the login screen
+    // If user is authenticated, bring user to home screen
     !user ? (
       <LoginScreen />
     ) : (
