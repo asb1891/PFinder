@@ -1,28 +1,29 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Button, Text, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const SearchSettings = ({ navigation }) => {
+const SearchSettings = () => {
   const [searchParams, setSearchParams] = useState({
-    dogs: false,
-    cats: false,
+    Dog: false,
+    Cat: false,
     age: false,
     gender: false,
-  });
+  }); // Create an object to hold the searchParams
 
-  const handleSearch = async () => {
-    try {
-      const queryParams = Object.keys(searchParams)
-        .filter((key) => searchParams[key])
-        .map((key) => `${key}=true`)
-        .join('&');
-  
-      // Here you would fetch data based on queryParams and pass it to the HomeScreen
-      // But instead of fetching here, consider just passing the queryParams to HomeScreen
-      navigation.navigate('Home', { queryParams }); // Pass queryParams as a parameter
-    } catch (error) {
-      console.error('Failed to fetch pet data:', error);
-    }
+const navigation = useNavigation(); // Pass the navigation function to the useNavigation hook
+
+//Search function to update the searchParams
+const handleSearch = async () => {
+    // Create query params based on searchParams
+    const queryParams = Object.entries(searchParams)
+      .filter(([key, value]) => value) // Filter out empty values
+      .map(([key]) => `type=${key}`) // Map the key to the value
+      .join('&'); // Join the values
+
+    // Pass the queryParams to the HomeScreen via navigation
+    navigation.navigate('Home', { queryParams });
   };
+  // Update the searchParams when a checkbox is toggled
   const toggleSearchParam = (param) => {
     setSearchParams((currentParams) => ({
       ...currentParams,
@@ -44,14 +45,14 @@ const SearchSettings = ({ navigation }) => {
     <View style={styles.container}>
       <CustomCheckbox
         label="Dogs"
-        value={searchParams.dogs}
-        onToggle={() => toggleSearchParam('dogs')}
+        value={searchParams.Dog}
+        onToggle={() => toggleSearchParam('Dog')}
       />
       {/* Repeat for other animal types or attributes */}
       <CustomCheckbox
         label="Cats"
-        value={searchParams.cats}
-        onToggle={() => toggleSearchParam('cats')}
+        value={searchParams.Cat}
+        onToggle={() => toggleSearchParam('Cat')}
       />
       {/* ... other checkboxes */}
       {/* Submit button */}
