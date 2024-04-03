@@ -38,10 +38,10 @@ const token = process.env.PETFINDER_TOKEN
 //     return petResponse.data.animals;
 // }
 
-async function fetchAnimals(token, type) {
+async function fetchAnimals(token, searchParams) {
     const petResponse = await axios.get(`https://api.petfinder.com/v2/animals`, {
         headers: { Authorization: `Bearer ${token}` },
-        params: { type }
+        params: searchParams
     });
 
     // Filter out animals that have no photos
@@ -64,8 +64,29 @@ async function fetchAnimals(token, type) {
 export const getPets = async (req, res) => {
     try {
         console.log('Bearer Token:', token);
-        const type = req.query.type || 'dog' && 'cat';
-        const animals = await fetchAnimals(token, type);
+        let searchParams = {};
+        if (req.query.type) {
+            searchParams.type =  req.query.type;
+        }
+        if (req.query.name) {
+            searchParams.name = req.query.name;
+        }
+        if (req.query.age) {
+            searchParams.age = req.query.age;
+        }
+        if (req.query.gender) {
+            searchParams.gender = req.query.gender;
+        }
+        if (req.query.breed) {
+            searchParams.breed = req.query.breed;
+        }
+        if (req.query.size) {
+            searchParams.size = req.query.size;
+        }
+        if (req.query.type) {
+            searchParams.type = req.query.type;
+        }
+        const animals = await fetchAnimals(token, searchParams);
 
         res.json(animals);
     } catch (error) {
