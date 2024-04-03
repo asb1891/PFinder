@@ -58,12 +58,6 @@ const PetSwiper = () => {
     fetchPets();
   }, []);
 
-  //function to save Pets on right swipe
-  // const handleSwipeRight = (cardIndex) => {
-  //   const savedPets = pets[cardIndex];
-  //   setSavedPets([...savedPets, savedPets]);
-  // };
-
   return (
     <View style={{ flex: 1 }}>
       <Swiper
