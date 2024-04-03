@@ -14,20 +14,18 @@ import { useIsFocused } from "@react-navigation/native";
 
 const HomeScreen = ({ route }) => {
   const [pets, setPets] = useState([]); //Create an array to hold the pets
-  const { logout } = useAuth();
-  const isFocused = useIsFocused();
+  const { logout } = useAuth(); //Pass the logout function to the useAuth hook
+  const isFocused = useIsFocused(); //Pass the isFocused function to the useIsFocused hook
 
   //Fetch the pets from the server
   useEffect(() => {
-    const fetchPets = async () => {
+    const fetchPets = async (queryParams = '') => {
+      // Fetch based on queryParams
+      const url = queryParams ? `http://localhost:4000/api/pets?${queryParams}` : 'http://localhost:4000/api/pets';
       try {
-        // Use the queryParams to build the query string
-        let queryString = '';
-        if (route.params?.queryParams) {
-          queryString = `?${route.params.queryParams}`;
-        }
-
-        const response = await fetch(`http://localhost:4000/api/pets${queryString}`);
+        // Fetch the pets from the server
+        const response = await fetch(url);
+        // Convert the response to JSON
         const data = await response.json();
         setPets(data);
       } catch (error) {
@@ -35,12 +33,11 @@ const HomeScreen = ({ route }) => {
       }
     };
 
-    if (isFocused) {
-      fetchPets();
+    // Check if queryParams are available and then fetch
+    if (route.params?.queryParams) {
+      fetchPets(route.params.queryParams);
     }
-    // Include route.params.queryParams in the dependency array
-    // This will cause the useEffect to run again when queryParams change
-  }, [isFocused, route.params?.queryParams]);
+  }, [route.params?.queryParams]);
 
 
   return (
