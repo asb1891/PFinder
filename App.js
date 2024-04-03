@@ -20,7 +20,7 @@ export default function App() {
 }
 
 const AppContent = () => {
-  const { user, loadingInitial } = useAuth();
+  const { user, loadingInitial } = useAuth(); //Pass the user and loadingInitial to the useAuth hook
 
   if (loadingInitial) {
     // You could return a loading spinner here
