@@ -4,17 +4,20 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } f
 import { FIREBASE_AUTH } from '../../database/firebase';
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState(''); //Email input
+  const [password, setPassword] = useState(''); //Password input
+  const [loading, setLoading] = useState(false); //Loading indicator
 
-  const auth = FIREBASE_AUTH;
+  const auth = FIREBASE_AUTH; //Get the auth object from the database
 
+  //Handle the login button press
   const handleLogin = async () => {
     setLoading(true);
     try {
+      // Sign in with email and password
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
+      // Navigate to the home screen
       navigation.navigate('Home');
     } catch (error) {
       console.log(error);;
@@ -22,10 +25,11 @@ const LoginScreen = ({ navigation }) => {
       setLoading(false);
     }
   };
-
+  //Handle the sign up button press
   const signUp = async () => {
     setLoading(true);
     try {
+      // Sign up with email and password
       const response = await createUserWithEmailAndPassword(auth, email, password);
       console.log(response);
       alert('Sign Up Success');
