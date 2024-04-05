@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, Image } from 'react-native';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../../database/firebase';
 
@@ -47,7 +47,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>PetSwipe</Text>
+      <Image source={require('../../assets/PetSwipeLogo.png')} style={styles.logo} />
       <TextInput
         style={styles.input}
         onChangeText={setEmail}
@@ -79,10 +79,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   logo: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    marginTop: 20,
   },
   input: {
     height: 40,
