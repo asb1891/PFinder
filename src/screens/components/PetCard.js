@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     padding: 5,
     borderRadius: 8,
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 2,
@@ -40,23 +40,7 @@ const styles = StyleSheet.create({
 });
 
 //Creating a PetSwiper component to display the pets in a swipeable deck
-const PetSwiper = () => {
-  const [pets, setPets] = useState([]);
-  // const [savedPets, setSavedPets] = useState([]);
-
-  //Fetch the pets from the server
-  useEffect(() => {
-    const fetchPets = async () => {
-      try {
-        const response = await fetch("http://localhost:4000/api/pets");
-        const data = await response.json();
-        setPets(data);
-      } catch (error) {
-        console.error("Error fetching pets: ", error);
-      }
-    };
-    fetchPets();
-  }, []);
+const PetSwiper = ({ pets }) => {
 
   return (
     <View style={{ flex: 1 }}>
@@ -75,7 +59,7 @@ const PetSwiper = () => {
           console.log("Swiped right", cardIndex);
         }}
         cardIndex={0}
-        backgroundColor={"#4FD0E9"}
+        backgroundColor={"white"}
         stackSize={25}
       ></Swiper>
     </View>
