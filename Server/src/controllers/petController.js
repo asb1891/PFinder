@@ -64,6 +64,10 @@ async function fetchAnimals(token, searchParams) {
 export const getPets = async (req, res) => {
     try {
         console.log('Bearer Token:', token);
+
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 100;
+
         let searchParams = {};
         if (req.query.type) {
             searchParams.type =  req.query.type;
@@ -86,7 +90,7 @@ export const getPets = async (req, res) => {
         if (req.query.type) {
             searchParams.type = req.query.type;
         }
-        const animals = await fetchAnimals(token, searchParams);
+        const animals = await fetchAnimals(token, searchParams, page, limit);
 
         res.json(animals);
     } catch (error) {
