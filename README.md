@@ -1,4 +1,5 @@
-Welcome to PetSwipe!
+![PetSwipe Logo](assets/PetSwipeLogo.png "PetSwipe Logo")
+
 
 
 ## Overview
