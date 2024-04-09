@@ -1,27 +1,33 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, Button, Text, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from "react";
+import { View, TouchableOpacity, Button, Text, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const SearchSettings = () => {
   const [searchParams, setSearchParams] = useState({
     Dog: false,
     Cat: false,
-    age: false,
-    gender: false,
+    Male: false,
+    Female: false
   }); // Create an object to hold the searchParams
 
-const navigation = useNavigation(); // Pass the navigation function to the useNavigation hook
+  const navigation = useNavigation(); // Pass the navigation function to the useNavigation hook
 
-//Search function to update the searchParams
-const handleSearch = async () => {
-    // Create query params based on searchParams
+  //Search function to update the searchParams
+  const handleSearch = async () => {
     const queryParams = Object.entries(searchParams)
-      .filter(([key, value]) => value) // Filter out empty values
-      .map(([key]) => `type=${key}`) // Map the key to the value
-      .join('&'); // Join the values
+      .filter(([key, value]) => value) // Filter for true values
+      .map(([key, value]) => {
+        if (key === 'Dog' || key === 'Cat') {
+          return `type=${key}`;
+        } else if (key === 'Male' && value) {
+          return `gender=male`;
+        } else if (key === 'Female' && value) {
+          return `gender=female`;
+        }
+      })
+      .join("&");
 
-    // Pass the queryParams to the HomeScreen via navigation
-    navigation.navigate('Home', { queryParams });
+    navigation.navigate("Home", { queryParams });
   };
   // Update the searchParams when a checkbox is toggled
   const toggleSearchParam = (param) => {
@@ -46,16 +52,23 @@ const handleSearch = async () => {
       <CustomCheckbox
         label="Dogs"
         value={searchParams.Dog}
-        onToggle={() => toggleSearchParam('Dog')}
+        onToggle={() => toggleSearchParam("Dog")}
       />
-      {/* Repeat for other animal types or attributes */}
       <CustomCheckbox
         label="Cats"
         value={searchParams.Cat}
-        onToggle={() => toggleSearchParam('Cat')}
+        onToggle={() => toggleSearchParam("Cat")}
       />
-      {/* ... other checkboxes */}
-      {/* Submit button */}
+      <CustomCheckbox
+        label="Male"
+        value={searchParams.Male} // Make sure this matches the state key exactly
+        onToggle={() => toggleSearchParam("Male")} // Pass the key as a string directly
+      />
+      <CustomCheckbox
+        label="Female"
+        value={searchParams.Female} // Make sure this matches the state key exactly
+        onToggle={() => toggleSearchParam("Female")} // Pass the key as a string directly
+      />
       <Button title="Update Search Filter" onPress={handleSearch} />
     </View>
   );
@@ -64,29 +77,29 @@ const handleSearch = async () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   checkbox: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   checkboxBox: {
     height: 20,
     width: 20,
     borderWidth: 1,
-    borderColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderColor: "#000",
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: 8,
   },
   checkboxChecked: {
-    backgroundColor: '#000',
+    backgroundColor: "#000",
   },
   checkboxCheckmark: {
-    color: '#fff',
+    color: "#fff",
   },
   label: {
     marginLeft: 8,
