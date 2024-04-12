@@ -67,36 +67,61 @@ export const getPets = async (req, res) => {
 
         const page = req.query.page || 1;
         const limit = req.query.limit || 100;
+        
+        // Split the type parameter into an array if it contains multiple types
+        const types = req.query.type ? req.query.type.split(',') : [];
 
-        let searchParams = {};
-        if (req.query.type) {
-            searchParams.type =  req.query.type;
-        }
-        if (req.query.name) {
-            searchParams.name = req.query.name;
-        }
-        if (req.query.age) {
-            searchParams.age = req.query.age;
-        }
-        if (req.query.gender) {
-            searchParams.gender = req.query.gender;
-        }
-        if (req.query.breed) {
-            searchParams.breed = req.query.breed;
-        }
-        if (req.query.size) {
-            searchParams.size = req.query.size;
-        }
-        if (req.query.type) {
-            searchParams.type = req.query.type;
-        }
-        const animals = await fetchAnimals(token, searchParams, page, limit);
+        let allAnimals = [];
 
-        res.json(animals);
+        // Fetch animals for each type and accumulate results
+        for (let type of types) {
+            let searchParams = {
+                page: page,
+                limit: limit,
+                type: type, // Pass single type here
+                name: req.query.name,
+                age: req.query.age,
+                gender: req.query.gender,
+                breed: req.query.breed,
+                size: req.query.size
+            };
+
+            const animals = await fetchAnimals(token, searchParams);
+            allAnimals = allAnimals.concat(animals);
+        }
+
+        res.json(allAnimals);
     } catch (error) {
         console.error('Failed to fetch pet data:', error.response ? error.response.data : error);
         res.status(500).json({ error: error.response ? error.response.data : error.message });
     }
 };
+// export const getPets = async (req, res) => {
+//     try {
+//         console.log('Bearer Token:', token);
+
+//         const page = req.query.page || 1;
+//         const limit = req.query.limit || 100;
+
+//         let searchParams = {
+//             page: page,
+//             limit: limit,
+//         }; 
+//         // Create an object to hold the searchParams
+//         if (req.query.type) searchParams.type = req.query.type;
+//         if (req.query.name) searchParams.name = req.query.name;
+//         if (req.query.age) searchParams.age = req.query.age;
+//         if (req.query.gender) searchParams.gender = req.query.gender;
+//         if (req.query.breed) searchParams.breed = req.query.breed;
+//         if (req.query.size) searchParams.size = req.query.size;
+
+//         const animals = await fetchAnimals(token, searchParams, page, limit);
+
+//         res.json(animals);
+//     } catch (error) {
+//         console.error('Failed to fetch pet data:', error.response ? error.response.data : error);
+//         res.status(500).json({ error: error.response ? error.response.data : error.message });
+//     }
+// };
 // export the token retrieval function and animal fetching functions for use elsewhere
 export { fetchAnimals };
