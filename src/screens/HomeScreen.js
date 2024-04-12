@@ -21,49 +21,100 @@ const HomeScreen = ({ route }) => {
 
   //Fetch the pets from the server
   useEffect(() => {
-    const fetchPets = async (queryParams = '') => {
-      const url = `http://localhost:4000/api/pets${queryParams ? '?' + queryParams : ''}`;
-      console.log('Fetching pets from:', url); // Log the URL being fetched
+    const fetchPets = async () => {
+      const queryParams = route.params?.queryParams || '';
+      const params = new URLSearchParams(queryParams);
+      params.append('page', page);
+  
+      const url = `http://localhost:4000/api/pets?${params.toString()}`;
+      console.log('Fetching pets from:', url); // For debugging
   
       try {
         const response = await fetch(url);
         const data = await response.json();
-        console.log('Pets fetched:', data); // Log the fetched data
-        setPets(data);
+        if (page === 1) {
+          setPets(data); // Starting a new search or initial load
+        } else {
+          setPets(prevPets => [...prevPets, ...data]); // Adding to existing pets
+        }
       } catch (error) {
         console.error("Error fetching pets: ", error);
+      } finally {
+        setIsFetchingMore(false); // Done fetching, whether successful or not
+      }
+    };
+      if (isFocused) {
+        fetchPets();
+      }
+    }, [isFocused, route.params?.queryParams, page]);
+  
+    // Call this function when the end of the swiper stack is reached
+    const fetchMorePets = async () => {
+      if (isFetchingMore) {
+        return; // Exit if already fetching the next page
+      }
+      setIsFetchingMore(true);
+      setPage(prevPage => prevPage +1) // Set the flag to true to start fetching more pets
+  
+      try {
+        const nextPage = page + 1; // Calculate the next page number
+        const queryParams = route.params?.queryParams || '';
+        const params = new URLSearchParams(queryParams);
+        params.append('page', nextPage);
+        const url = `http://localhost:4000/api/pets?${params.toString()}`;
+        console.log(`Fetching pets from: ${url}, page: ${nextPage}`);
+  
+        const response = await fetch(url);
+        const data = await response.json();
+  
+        if (data.length > 0) {
+          setPets(prevPets => [...prevPets, ...data]);
+          setPage(nextPage); // Update the page number to the next page
+        } else {
+          console.log('No more pets to fetch.');
+        }
+      } catch (error) {
+        console.error("Error fetching more pets: ", error);
+      } finally {
+        setIsFetchingMore(false); // Reset the flag after fetching
       }
     };
   
-    if (route.params?.queryParams) {
-      console.log('Received queryParams:', route.params.queryParams); // Log received query parameters
-      fetchPets(route.params.queryParams);
-    } else {
-      console.log('Fetching all pets as no queryParams were received.');
-      fetchPets(); // Fetch without filters to get all animals
-    }
-  }, [route.params?.queryParams, page]);
+    // Reset when the search criteria change
+    useEffect(() => {
+      setPage(1);
+      setPets([]); // Clear the existing pets to start a new search
+    }, [route.params?.queryParams]);
 
-  const fetchMorePets = () => {
-    if (isFetchingMore) return;
-
-    setIsFetchingMore(true);
-    setPage(currentPage => currentPage + 1);
-  };
+    const handleSwipe = (cardIndex) => {
+      console.log(`Card swiped: ${cardIndex}, Total Pets: ${pets.length}`);
+      if (!isFetchingMore && cardIndex >= pets.length - 5) {
+        console.log('Fetching more pets...');
+        fetchMorePets();
+      }
+    };
 
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={logout} style={styles.logoutButton}>
-        <Text>LogOut</Text>
-      </TouchableOpacity>
-      {pets.length > 0 ? (
-        <PetSwiper pets={pets} onEndReached={fetchMorePets} />
-      ) : (
-        <ActivityIndicator size="large" color="#00ff00" />
-      )}
-    </SafeAreaView>
-  );
+    return (
+      <SafeAreaView style={styles.container}>
+        <TouchableOpacity onPress={logout} style={styles.logoutButton}>
+          <Text>LogOut</Text>
+        </TouchableOpacity>
+        {pets.length > 0 ? (
+          <>
+            <PetSwiper pets={pets} 
+            onSwipe={handleSwipe} />
+            {isFetchingMore && 
+              <ActivityIndicator size="large" color="#00ff00" />
+            }
+          </>
+        ) : isFetchingMore ? (
+          <ActivityIndicator size="large" color="#00ff00" />
+        ) : (
+          <Text>No pets available.</Text> // You can change this to your preferred message or UI for no pets
+        )}
+      </SafeAreaView>
+    );
       };
 
 const styles = StyleSheet.create({
