@@ -13,15 +13,15 @@ const LoginScreen = () => {
 
   const auth = FIREBASE_AUTH; //Get the auth object from the database; 
 
-  //Handle the login button press
+  //Handle the login button logic
   const handleLogin = async () => {
     setLoading(true);
     try {
       // Sign in with email and password
-      const response = await signInWithEmailAndPassword(auth, email, password);
+      const response = await signInWithEmailAndPassword(auth, email, password); //Sign in with email and password
       console.log(response);
       // Navigate to the home screen
-      navigation.navigate('Home');
+      navigation.navigate('Home'); //Navigate to the home screen
       console.log("navigating")
     } catch (error) {
       console.log("navigation error");;
@@ -34,10 +34,10 @@ const LoginScreen = () => {
     setLoading(true);
     try {
       // Sign up with email and password
-      const response = await createUserWithEmailAndPassword(auth, email, password);
+      const response = await createUserWithEmailAndPassword(auth, email, password); //Sign up with email and password
       console.log(response);
       alert('Sign Up Success');
-      navigation.navigate('Home');
+      navigation.navigate('Home'); //Navigate to the home screen
       console.log(navigation)
     } catch (error) {
       console.log(error);
