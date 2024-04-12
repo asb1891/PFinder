@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Image } from 'react-native';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../../database/firebase';
+import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = () => {
   const [email, setEmail] = useState(''); //Email input
   const [password, setPassword] = useState(''); //Password input
   const [loading, setLoading] = useState(false); //Loading indicator
+  const navigation = useNavigation(); //Pass the navigation function to the useNavigation hook
 
-  const auth = FIREBASE_AUTH; //Get the auth object from the database
+
+  const auth = FIREBASE_AUTH; //Get the auth object from the database; 
 
   //Handle the login button press
   const handleLogin = async () => {
@@ -19,8 +22,9 @@ const LoginScreen = ({ navigation }) => {
       console.log(response);
       // Navigate to the home screen
       navigation.navigate('Home');
+      console.log("navigating")
     } catch (error) {
-      console.log(error);;
+      console.log("navigation error");;
     } finally {
       setLoading(false);
     }
@@ -34,6 +38,7 @@ const LoginScreen = ({ navigation }) => {
       console.log(response);
       alert('Sign Up Success');
       navigation.navigate('Home');
+      console.log(navigation)
     } catch (error) {
       console.log(error);
       alert('Sign Up Failed' + error.message);
