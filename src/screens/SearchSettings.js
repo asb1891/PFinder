@@ -13,22 +13,30 @@ const SearchSettings = () => {
   const navigation = useNavigation(); // Pass the navigation function to the useNavigation hook
 
   //Search function to update the searchParams
-  const handleSearch = async () => {
-    const queryParams = Object.entries(searchParams)
-      .filter(([key, value]) => value) // Filter for true values
-      .map(([key, value]) => {
-        if (key === 'Dog' || key === 'Cat') {
-          return `type=${key}`;
-        } else if (key === 'Male' && value) {
-          return `gender=male`;
-        } else if (key === 'Female' && value) {
-          return `gender=female`;
-        }
-      })
-      .join("&");
+const handleSearch = async () => {
+    // Gather all types in an array
+    let types = [];
+    if (searchParams.Dog) types.push("Dog");
+    if (searchParams.Cat) types.push("Cat");
+
+    // Join types with a comma if multiple types are selected
+    let typeParam = types.join(",");
+
+    let genderParam = searchParams.Male? 'Male' : searchParams.Female? 'Female' : '';
+
+    // Construct the query parameters string 
+    let queryParams = '';
+    if (typeParam) {
+        queryParams += `type=${typeParam}`;
+    }
+    if (genderParam) {
+        // Append the gender parameter, prefixed with an "&" if 'typeParam' is also set
+        queryParams += `${typeParam ? '&' : ''}gender=${genderParam}`;
+    }
 
     navigation.navigate("Home", { queryParams });
-  };
+};
+  
   // Update the searchParams when a checkbox is toggled
   const toggleSearchParam = (param) => {
     setSearchParams((currentParams) => ({
