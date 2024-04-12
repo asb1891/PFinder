@@ -16,19 +16,19 @@ const SearchSettings = () => {
   //Search function to update the searchParams
   const handleSearch = async () => {
     let types = [];
-    if (searchParams.Dog) types.push("Dog");
-    if (searchParams.Cat) types.push("Cat");
-    if (searchParams.Bird) types.push("Bird");
+    if (searchParams.Dog) types.push("Dog"); // Add the type parameter to the query string
+    if (searchParams.Cat) types.push("Cat");// Add the type parameter to the query string
+    if (searchParams.Bird) types.push("Bird");  // Add the type parameter to the query string
 
     let typeParam = types.join(","); // This will create a string like "Dog,Cat,Bird"
     let genderParam = searchParams.Male ? 'Male' : searchParams.Female ? 'Female' : '';
-
+    // Create the query parameters string
     let queryParams = '';
     if (typeParam) {
-        queryParams += `type=${typeParam}`;
+        queryParams += `type=${typeParam}`; // Add the type parameter to the query string
     }
     if (genderParam) {
-        queryParams += `${typeParam ? '&' : ''}gender=${genderParam}`;
+        queryParams += `${typeParam ? '&' : ''}gender=${genderParam}`; // Add the gender parameter to the query string
     }
 
     console.log("Query Params:", queryParams); // Log the query parameters to debug
