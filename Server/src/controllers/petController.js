@@ -5,7 +5,6 @@ dotenv.config();
 
 const token = process.env.PETFINDER_TOKEN
 
-
 async function fetchAnimals(token, searchParams) {
     const petResponse = await axios.get(`https://api.petfinder.com/v2/animals`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -33,14 +32,14 @@ export const getPets = async (req, res) => {
     try {
         console.log('Bearer Token:', token);
 
-        const page = req.query.page || 1;
-        const limit = req.query.limit || 100;
+        const page = req.query.page || 1; // Default to page 1
+        const limit = req.query.limit || 100; // Default to 100 results
         
         // Define default types or fetch all types if none are specified
         const defaultTypes = ['Dog', 'Cat', 'Bird']; // Example default types
-        const types = req.query.type ? req.query.type.split(',') : defaultTypes;
+        const types = req.query.type ? req.query.type.split(',') : defaultTypes; // Split the type parameter into an array
 
-        let allAnimals = [];
+        let allAnimals = []; // Initialize an array to hold all the animals
 
         // Fetch animals for each type and accumulate results
         for (let type of types) {
@@ -55,11 +54,11 @@ export const getPets = async (req, res) => {
                 size: req.query.size
             };
 
-            const animals = await fetchAnimals(token, searchParams);
-            allAnimals = allAnimals.concat(animals);
+            const animals = await fetchAnimals(token, searchParams); // Fetch the animals for the current type
+            allAnimals = allAnimals.concat(animals); // Accumulate the results
         }
 
-        res.json(allAnimals);
+        res.json(allAnimals); // Return the animals as JSON
     } catch (error) {
         console.error('Failed to fetch pet data:', error.response ? error.response.data : error);
         res.status(500).json({ error: error.response ? error.response.data : error.message });
