@@ -1,4 +1,4 @@
-![react-native](https://img.shields.io/badge/Framework-ReactNative-blue)
+![react-native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![firebase](https://img.shields.io/badge/Database-Firebase-orange)
 
 
