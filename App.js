@@ -34,7 +34,7 @@ const AppContent = () => {
       <LoginScreen />
     ) : (
       <Tab.Navigator initialRouteName="Home">
-        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Home" component={HomeScreen} /> 
         <Tab.Screen name="My Pets" component={SavedPets} />
         <Tab.Screen name="Search Settings" component={SearchSettings} />
       </Tab.Navigator>
