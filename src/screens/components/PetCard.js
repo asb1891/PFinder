@@ -12,6 +12,7 @@ const PetCard = ({ pet }) => {
       <Text style={styles.text}>Age: {pet.age}</Text>
       <Text style={styles.text}>Gender: {pet.gender}</Text>
       <Text style={styles.text}>Contact: {pet.contact.email}</Text>
+      <Text style={styles.text}>Zip Code: {pet.contact.address.postcode}</Text>
     </View>
   );
 };
