@@ -1,3 +1,9 @@
+![react-native](https://img.shields.io/badge/Framework-ReactNative-blue)
+![firebase](https://img.shields.io/badge/Database-Firebase-orange)
+
+
+
+
 ![PetSwipe Logo](assets/PetSwipeLogo.png "PetSwipe Logo")
 
 
