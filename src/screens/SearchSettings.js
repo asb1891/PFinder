@@ -6,6 +6,7 @@ const SearchSettings = () => {
   const [searchParams, setSearchParams] = useState({
     Dog: false,
     Cat: false,
+    Bird: false,
     Male: false,
     Female: false
   }); // Create an object to hold the searchParams
@@ -13,29 +14,27 @@ const SearchSettings = () => {
   const navigation = useNavigation(); // Pass the navigation function to the useNavigation hook
 
   //Search function to update the searchParams
-const handleSearch = async () => {
-    // Gather all types in an array
+  const handleSearch = async () => {
     let types = [];
     if (searchParams.Dog) types.push("Dog");
     if (searchParams.Cat) types.push("Cat");
+    if (searchParams.Bird) types.push("Bird");
 
-    // Join types with a comma if multiple types are selected
-    let typeParam = types.join(",");
+    let typeParam = types.join(","); // This will create a string like "Dog,Cat,Bird"
+    let genderParam = searchParams.Male ? 'Male' : searchParams.Female ? 'Female' : '';
 
-    let genderParam = searchParams.Male? 'Male' : searchParams.Female? 'Female' : '';
-
-    // Construct the query parameters string 
     let queryParams = '';
     if (typeParam) {
         queryParams += `type=${typeParam}`;
     }
     if (genderParam) {
-        // Append the gender parameter, prefixed with an "&" if 'typeParam' is also set
         queryParams += `${typeParam ? '&' : ''}gender=${genderParam}`;
     }
 
+    console.log("Query Params:", queryParams); // Log the query parameters to debug
     navigation.navigate("Home", { queryParams });
 };
+
   
   // Update the searchParams when a checkbox is toggled
   const toggleSearchParam = (param) => {
@@ -66,6 +65,11 @@ const handleSearch = async () => {
         label="Cats"
         value={searchParams.Cat}
         onToggle={() => toggleSearchParam("Cat")}
+      />
+      <CustomCheckbox
+      label="Birds"
+      value={searchParams.Bird}
+      onToggle={() => toggleSearchParam("Bird")}
       />
       <CustomCheckbox
         label="Male"
