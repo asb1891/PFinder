@@ -2,7 +2,7 @@
 import express from 'express';
 import { getPets } from '../controllers/petController.js';
 
-const router = express.Router();
+const router = express.Router(); // Create a new express router
 // Route for fetching pet data
 router.get('/pets', getPets);
 
