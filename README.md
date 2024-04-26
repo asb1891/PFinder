@@ -3,8 +3,6 @@
 ![nodejs](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 
 
-
-
 ![PetSwipe Logo](assets/PetSwipeLogo.png "PetSwipe Logo")
 
 
