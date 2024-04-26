@@ -32,9 +32,22 @@ export const getPets = async (req, res) => {
     try {
         console.log('Bearer Token:', token);
 
-        const page = req.query.page || 1; // Default to page 1
-        const limit = req.query.limit || 100; // Default to 100 results
+        // Parse page, limit, and radius from query parameters
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 100;
+        const radius = req.query.radius || '25'; // Default radius in miles
         
+        // Additional parameters for location-based search
+        const latitude = req.query.latitude || 40.7128; // Default latitude
+        console.log('Latitude:', latitude);
+        const longitude = req.query.longitude || -74.0060; // Default longitude
+        console.log('Longitude:', longitude);
+
+        // Validate latitude and longitude
+        if (!latitude || !longitude) {
+            return res.status(400).json({ message: 'Latitude and longitude are required for location-based search.' });
+        }
+
         // Define default types or fetch all types if none are specified
         const defaultTypes = ['Dog', 'Cat', 'Bird']; // Example default types
         const types = req.query.type ? req.query.type.split(',') : defaultTypes; // Split the type parameter into an array
@@ -43,6 +56,7 @@ export const getPets = async (req, res) => {
 
         // Fetch animals for each type and accumulate results
         for (let type of types) {
+
             let searchParams = {
                 page: page,
                 limit: limit,
@@ -51,7 +65,9 @@ export const getPets = async (req, res) => {
                 age: req.query.age,
                 gender: req.query.gender,
                 breed: req.query.breed,
-                size: req.query.size
+                size: req.query.size,
+                distance: radius,
+                location: `${latitude},${longitude}`, // Pass the latitude and longitude as a single string
             };
 
             const animals = await fetchAnimals(token, searchParams); // Fetch the animals for the current type
