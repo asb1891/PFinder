@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { View, TouchableOpacity, Button, Text, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, TouchableOpacity, Button, Text, StyleSheet, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import * as Location from "expo-location";
 
 const SearchSettings = () => {
   const [searchParams, setSearchParams] = useState({
@@ -11,7 +12,23 @@ const SearchSettings = () => {
     Female: false
   }); // Create an object to hold the searchParams
 
+  const [location, setLocation] = useState(null); // Create a state variable to hold the location
+  const [radius, setRadius] = useState('25'); // Create a state variable to hold the radius
+
   const navigation = useNavigation(); // Pass the navigation function to the useNavigation hook
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status!== "granted") {
+        console.error("Location permission not granted");
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      console.log("Fetched location:", location);
+    })();
+  }, []); // Only run the effect when the component mounts
 
   //Search function to update the searchParams
   const handleSearch = async () => {
@@ -30,12 +47,14 @@ const SearchSettings = () => {
     if (genderParam) {
         queryParams += `${typeParam ? '&' : ''}gender=${genderParam}`; // Add the gender parameter to the query string
     }
+    if (location) {
+      queryParams += `&latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&radius=${radius}`;
+    }
+    
 
     console.log("Query Params:", queryParams); // Log the query parameters to debug
     navigation.navigate("Home", { queryParams });
 };
-
-  
   // Update the searchParams when a checkbox is toggled
   const toggleSearchParam = (param) => {
     setSearchParams((currentParams) => ({
@@ -81,6 +100,15 @@ const SearchSettings = () => {
         value={searchParams.Female} // Make sure this matches the state key exactly
         onToggle={() => toggleSearchParam("Female")} // Pass the key as a string directly
       />
+      <View style={styles.inputContainer}>
+        <Text>Search Radius (miles): </Text>
+        <TextInput 
+          style={styles.radiusInput} 
+          value={radius} 
+          onChangeText={setRadius} 
+          keyboardType="numeric" 
+        />
+      </View>
       <Button title="Update Search Filter" onPress={handleSearch} />
     </View>
   );
@@ -115,6 +143,20 @@ const styles = StyleSheet.create({
   },
   label: {
     marginLeft: 8,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginVertical: 10,
+  },
+  radiusInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    width: 100,
   },
 });
 
