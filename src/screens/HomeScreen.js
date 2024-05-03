@@ -63,19 +63,22 @@ const HomeScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView className="flex-1 pt-[50px] pb-4 px-2 bg-white">
-      
-      {isFetchingMore && <ActivityIndicator size="large" color="#00ff00" />}
-      {pets.length > 0 ? (
-        <View className="justify-items-center mb-7">
-          {/* <Button title="Sign Out" onPress={logout} className="mb-2 mt-4" /> */}
-          <PetSwiper pets={pets} onSwipe={handleSwipe} />
+      {isFetchingMore ? (
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="blue" />
         </View>
       ) : (
-        !isFetchingMore && (
-          <Text className="text-lg font-bold m-4 text-center">
-            No pets available.
-          </Text>
-        )
+        <View className="flex-1">
+          {pets.length > 0 ? (
+            <View className="justify-items-center mb-7">
+              <PetSwiper pets={pets} onSwipe={handleSwipe} />
+            </View>
+          ) : (
+            <Text className="text-lg font-bold m-4 text-center">
+              No pets available.
+            </Text>
+          )}
+        </View>
       )}
     </SafeAreaView>
   );
