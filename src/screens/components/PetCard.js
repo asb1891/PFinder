@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import Swiper from "react-native-deck-swiper";
 
@@ -15,7 +15,7 @@ const debounce = (func, delay) => {
 //Creating a PetCard component for each pet in the pets array
 //Defines information about each Pet
 const PetCard = ({ pet }) => {
-  const [currentPhotoIndex, setCurrentPhotoIndex] = React.useState(0);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
   //function to cycle to the next photo
   const handlePhotoChange = debounce(() => {
@@ -26,17 +26,28 @@ const PetCard = ({ pet }) => {
   return (
     <TouchableOpacity
       onPress={handlePhotoChange}
-      className="m-1 border-solid border-2 border-neutral-300 p-3.5 rounded-lg bg-orange-100 shadow-md elevation-2"
+      className="m-1 border-2 border-neutral-300 p-3.5 rounded-lg bg-orange-100 shadow-md elevation-2"
     >
       <Image
-        className="w-full mb-2.5 h-[500px] rounded-lg"
+        className="w-full h-[500px] mb-2.5 rounded-lg border-2 border-neutral-300"
         source={{ uri: pet.photos[currentPhotoIndex]?.medium }}
       />
-      <Text className="font-bold italic text-lg text-rose-500">{pet.name}</Text>
+      <View className="flex-row justify-center mt-1">
+        {pet.photos.map((_, idx) => (
+          <View
+            key={idx}
+            className={`h-3 w-3 mx-1 rounded-full ${
+              idx === currentPhotoIndex ? "bg-blue-500" : "bg-gray-300"
+            }`}
+          ></View>
+        ))}
+      </View>
+      <Text className="text-lg font-bold italic text-rose-500">{pet.name}</Text>
       <Text className="mt-1">Age: {pet.age}</Text>
       <Text className="mt-1">Gender: {pet.gender}</Text>
       <Text className="mt-1">Contact: {pet.contact.email}</Text>
       <Text className="mt-1">Zip Code: {pet.contact.address.postcode}</Text>
+      
     </TouchableOpacity>
   );
 };
