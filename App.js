@@ -1,11 +1,12 @@
-import { NavigationContainer } from '@react-navigation/native';;
-import HomeScreen from './src/screens/HomeScreen';
-import SavedPets from './src/screens/SavedPets';
-import { AuthProvider } from './hooks/useAuth';
-import useAuth from './hooks/useAuth';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import SearchSettings from './src/screens/SearchSettings';
-import LoginScreen from './src/screens/LoginScreen';
+import { NavigationContainer } from "@react-navigation/native";
+import HomeScreen from "./src/screens/HomeScreen";
+import SavedPets from "./src/screens/SavedPets";
+import { AuthProvider } from "./hooks/useAuth";
+import useAuth from "./hooks/useAuth";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import SearchSettings from "./src/screens/SearchSettings";
+import LoginScreen from "./src/screens/LoginScreen";
+import { Image } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
@@ -34,11 +35,58 @@ const AppContent = () => {
       <LoginScreen />
     ) : (
       <Tab.Navigator initialRouteName="Home">
-        <Tab.Screen name="Home" component={HomeScreen} /> 
-        <Tab.Screen name="My Pets" component={SavedPets} />
-        <Tab.Screen name="Search Settings" component={SearchSettings} />
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            headerTitle: () => (
+              <Image
+                source={require("./assets/PetSwipeLogo.png")}
+                style={{
+                  width: 65,
+                  height: 65,
+                  resizeMode: "contain",
+                  alignSelf: "center",
+                }}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="My Pets"
+          component={SavedPets}
+          options={{
+            headerTitle: () => (
+              <Image
+                source={require("./assets/PetSwipeLogo.png")}
+                style={{
+                  width: 65,
+                  height: 65,
+                  resizeMode: "contain",
+                  alignSelf: "center",
+                }}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Search Settings"
+          component={SearchSettings}
+          options={{
+            headerTitle: () => (
+              <Image
+                source={require("./assets/PetSwipeLogo.png")}
+                style={{
+                  width: 65,
+                  height: 65,
+                  resizeMode: "contain",
+                  alignSelf: "center",
+                }}
+              />
+            ),
+          }}
+        />
       </Tab.Navigator>
     )
   );
 };
-    
