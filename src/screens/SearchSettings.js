@@ -52,7 +52,7 @@ const SearchSettings = () => {
   };
 
   return (
-    <View className="flex-1 bg-gray-100 p-4">
+    <View className="flex-1 bg-white p-5">
       {/* Dogs */}
       <TouchableOpacity onPress={() => toggleSearchParam('Dog')} className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow">
         <Icon name="paw" size={20} color="#4B5563" className="mr-2" />
