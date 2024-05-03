@@ -1,51 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
+import React from "react";
+import { View, Text, Image } from "react-native";
 import Swiper from "react-native-deck-swiper";
 
 //Creating a PetCard component for each pet in the pets array
 //Defines information about each Pet
 const PetCard = ({ pet }) => {
   return (
-    <View style={styles.card}>
-      <Image style={styles.image} source={{ uri: pet.photos[0]?.medium }} />
-      <Text style={styles.text}>{pet.name}</Text>
-      <Text style={styles.text}>Age: {pet.age}</Text>
-      <Text style={styles.text}>Gender: {pet.gender}</Text>
-      <Text style={styles.text}>Contact: {pet.contact.email}</Text>
-      <Text style={styles.text}>Zip Code: {pet.contact.address.postcode}</Text>
+    <View className="m-1 border border-gray-300 p-2.5 rounded-lg bg-orange-200 shadow-md elevation-2">
+      <Image 
+        className="w-full mb-2.5 h-[500px] rounded-lg"
+        source={{ uri: pet.photos[0]?.medium }} 
+      />
+      <Text className="font-bold italic text-lg text-red-400">{pet.name}</Text>
+      <Text className="mt-1">Age: {pet.age}</Text>
+      <Text className="mt-1">Gender: {pet.gender}</Text>
+      <Text className="mt-1">Contact: {pet.contact.email}</Text>
+      <Text className="mt-1">Zip Code: {pet.contact.address.postcode}</Text>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    margin: 10,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    padding: 10,
-    borderRadius: 8,
-    backgroundColor: "white",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-    marginBottom: 10,
-  },
-  image: {
-    width: "100%",
-    height: 500,
-    borderRadius: 8,
-  },
-  text: {
-    marginTop: 5,
-  },
-});
 
 //Creating a PetSwiper component to display the pets in a swipeable deck
 const PetSwiper = ({ pets }) => {
 
   return (
-    <View style={{ flex: 1 }}>
+    <View>
       <Swiper
         cards={pets}
         renderCard={(card) =>
