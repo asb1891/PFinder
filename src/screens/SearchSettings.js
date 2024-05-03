@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Button, Text, StyleSheet, TextInput } from "react-native";
+import { View, TouchableOpacity, Text, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const SearchSettings = () => {
   const [searchParams, setSearchParams] = useState({
@@ -9,155 +10,95 @@ const SearchSettings = () => {
     Cat: false,
     Bird: false,
     Male: false,
-    Female: false
-  }); // Create an object to hold the searchParams
+    Female: false,
+    Young: false,
+    Adult: false,
+    Baby: false,
+    Mature: false,
+  });
 
-  const [location, setLocation] = useState(null); // Create a state variable to hold the location
-  const [radius, setRadius] = useState('25'); // Create a state variable to hold the radius
-
-  const navigation = useNavigation(); // Pass the navigation function to the useNavigation hook
+  const [location, setLocation] = useState(null);
+  const [radius, setRadius] = useState('25');
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status!== "granted") {
+      if (status !== "granted") {
         console.error("Location permission not granted");
         return;
       }
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-      console.log("Fetched location:", location);
     })();
-  }, []); // Only run the effect when the component mounts
+  }, []);
 
-  //Search function to update the searchParams
-  const handleSearch = async () => {
-    let types = [];
-    if (searchParams.Dog) types.push("Dog"); // Add the type parameter to the query string
-    if (searchParams.Cat) types.push("Cat");// Add the type parameter to the query string
-    if (searchParams.Bird) types.push("Bird");  // Add the type parameter to the query string
-
-    let typeParam = types.join(","); // This will create a string like "Dog,Cat,Bird"
+  const handleSearch = () => {
+    let types = ["Dog", "Cat", "Bird"].filter(type => searchParams[type]);
+    let ageParam = searchParams.Young ? 'Young' : searchParams.Adult ? 'Adult' : searchParams.Baby ? 'Baby' : searchParams.Mature ? 'Mature' : '';
     let genderParam = searchParams.Male ? 'Male' : searchParams.Female ? 'Female' : '';
-    // Create the query parameters string
-    let queryParams = '';
-    if (typeParam) {
-        queryParams += `type=${typeParam}`; // Add the type parameter to the query string
-    }
-    if (genderParam) {
-        queryParams += `${typeParam ? '&' : ''}gender=${genderParam}`; // Add the gender parameter to the query string
-    }
+    let queryParams = `type=${types.join(",")}&gender=${genderParam}`;
     if (location) {
       queryParams += `&latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&radius=${radius}`;
     }
-    
-
-    console.log("Query Params:", queryParams); // Log the query parameters to debug
     navigation.navigate("Home", { queryParams });
-};
-  // Update the searchParams when a checkbox is toggled
+  };
+
   const toggleSearchParam = (param) => {
-    setSearchParams((currentParams) => ({
+    setSearchParams(currentParams => ({
       ...currentParams,
       [param]: !currentParams[param],
     }));
   };
 
-  // Helper component for a custom checkbox
-  const CustomCheckbox = ({ value, onToggle, label }) => (
-    <TouchableOpacity onPress={onToggle} style={styles.checkbox}>
-      <View style={[styles.checkboxBox, value && styles.checkboxChecked]}>
-        {value && <Text style={styles.checkboxCheckmark}>✓</Text>}
-      </View>
-      <Text style={styles.label}>{label}</Text>
-    </TouchableOpacity>
-  );
-
   return (
-    <View style={styles.container}>
-      <CustomCheckbox
-        label="Dogs"
-        value={searchParams.Dog}
-        onToggle={() => toggleSearchParam("Dog")}
-      />
-      <CustomCheckbox
-        label="Cats"
-        value={searchParams.Cat}
-        onToggle={() => toggleSearchParam("Cat")}
-      />
-      <CustomCheckbox
-      label="Birds"
-      value={searchParams.Bird}
-      onToggle={() => toggleSearchParam("Bird")}
-      />
-      <CustomCheckbox
-        label="Male"
-        value={searchParams.Male} // Make sure this matches the state key exactly
-        onToggle={() => toggleSearchParam("Male")} // Pass the key as a string directly
-      />
-      <CustomCheckbox
-        label="Female"
-        value={searchParams.Female} // Make sure this matches the state key exactly
-        onToggle={() => toggleSearchParam("Female")} // Pass the key as a string directly
-      />
-      <View style={styles.inputContainer}>
-        <Text>Search Radius (miles): </Text>
+    <View className="flex-1 bg-gray-100 p-4">
+      {/* Dogs */}
+      <TouchableOpacity onPress={() => toggleSearchParam('Dog')} className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow">
+        <Icon name="paw" size={20} color="#4B5563" className="mr-2" />
+        <Text className="flex-1 text-lg">Dog</Text>
+        <View className={`w-5 h-5 rounded-full ${searchParams.Dog ? 'bg-yellow-400' : 'bg-transparent'} border border-yellow-400`}/>
+      </TouchableOpacity>
+      {/* Cats */}
+      <TouchableOpacity onPress={() => toggleSearchParam('Cat')} className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow">
+        <Icon name="paw" size={20} color="#4B5563" className="mr-2" />
+        <Text className="flex-1 text-lg">Cat</Text>
+        <View className={`w-5 h-5 rounded-full ${searchParams.Cat ? 'bg-yellow-400' : 'bg-transparent'} border border-yellow-400`}/>
+      </TouchableOpacity>
+      {/* Birds */}
+      <TouchableOpacity onPress={() => toggleSearchParam('Bird')} className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow">
+        <Icon name="paw" size={20} color="#4B5563" className="mr-2" />
+        <Text className="flex-1 text-lg">Bird</Text>
+        <View className={`w-5 h-5 rounded-full ${searchParams.Bird ? 'bg-yellow-400' : 'bg-transparent'} border border-yellow-400`}/>
+      </TouchableOpacity>
+      {/* Male */}
+      <TouchableOpacity onPress={() => toggleSearchParam('Male')} className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow">
+        <Icon name="male" size={20} color="#4B5563" className="mr-2" />
+        <Text className="flex-1 text-lg">Male</Text>
+        <View className={`w-5 h-5 rounded-full ${searchParams.Male ? 'bg-yellow-400' : 'bg-transparent'} border border-yellow-400`}/>
+      </TouchableOpacity>
+      {/* Female */}
+      <TouchableOpacity onPress={() => toggleSearchParam('Female')} className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow">
+        <Icon name="female" size={20} color="#4B5563" className="mr-2" />
+        <Text className="flex-1 text-lg">Female</Text>
+        <View className={`w-5 h-5 rounded-full ${searchParams.Female ? 'bg-yellow-400' : 'bg-transparent'} border border-yellow-400`}/>
+      </TouchableOpacity>
+      {/* Search Radius */}
+      <View className="flex-row items-center p-3 mt-4 bg-white rounded-lg shadow">
+        <Text className="flex-1 text-lg">Search Radius (miles):</Text>
         <TextInput 
-          style={styles.radiusInput} 
-          value={radius} 
-          onChangeText={setRadius} 
+          className="border border-gray-300 p-2 rounded-lg"
+          value={radius}
+          onChangeText={setRadius}
           keyboardType="numeric" 
         />
       </View>
-      <Button title="Update Search Filter" onPress={handleSearch} />
+      <TouchableOpacity onPress={handleSearch} className="bg-yellow-400 p-3 rounded-lg mt-6 items-center">
+        <Text className="text-black text-lg">Update Search Filter</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  checkbox: {
-    flexDirection: "row",
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  checkboxBox: {
-    height: 20,
-    width: 20,
-    borderWidth: 1,
-    borderColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 8,
-  },
-  checkboxChecked: {
-    backgroundColor: "#000",
-  },
-  checkboxCheckmark: {
-    color: "#fff",
-  },
-  label: {
-    marginLeft: 8,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    marginVertical: 10,
-  },
-  radiusInput: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
-    width: 100,
-  },
-});
-
 export default SearchSettings;
+
