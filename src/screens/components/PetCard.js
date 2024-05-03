@@ -29,7 +29,7 @@ const PetCard = ({ pet }) => {
       className="m-1 border-2 border-neutral-300 p-3.5 rounded-lg bg-orange-100 shadow-md elevation-2"
     >
       <Image
-        className="w-full h-[500px] mb-2.5 rounded-lg border-2 border-neutral-300"
+        className="w-full h-[500px] mb-0.5 rounded-lg border-2 border-neutral-300"
         source={{ uri: pet.photos[currentPhotoIndex]?.medium }}
       />
       <View className="flex-row justify-center mt-1">
@@ -46,8 +46,10 @@ const PetCard = ({ pet }) => {
       <Text className="mt-1">Age: {pet.age}</Text>
       <Text className="mt-1">Gender: {pet.gender}</Text>
       <Text className="mt-1">Contact: {pet.contact.email}</Text>
-      <Text className="mt-1">Location: {pet.contact.address.city}, {pet.contact.address.state} {pet.contact.address.postcode}</Text>
-      
+      <Text className="mt-1">
+        Location: {pet.contact.address.city}, {pet.contact.address.state}{" "}
+        {pet.contact.address.postcode}
+      </Text>
     </TouchableOpacity>
   );
 };
