@@ -15,7 +15,7 @@ const debounce = (func, delay) => {
 //Creating a PetCard component for each pet in the pets array
 //Defines information about each Pet
 const PetCard = ({ pet }) => {
-  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0); //Current photo index
 
   //function to cycle to the next photo
   const handlePhotoChange = debounce(() => {
@@ -35,14 +35,14 @@ const PetCard = ({ pet }) => {
       <View className="flex-row justify-center mt-1">
         {pet.photos.map((_, idx) => (
           <View
-            key={idx}
+            key={idx} // Create a dot for each photo
             className={`h-3 w-3 mx-1 rounded-full ${
-              idx === currentPhotoIndex ? "bg-blue-500" : "bg-gray-300"
+              idx === currentPhotoIndex ? "bg-orange-500" : "bg-gray-300" // Set the background color of the dot to orange if it's the current photo index
             }`}
           ></View>
         ))}
       </View>
-      <Text className="text-lg font-bold italic text-rose-500">{pet.name}</Text>
+      <Text className="text-lg font-bold italic text-red-600">{pet.name}</Text>
       <Text className="mt-1">Age: {pet.age}</Text>
       <Text className="mt-1">Gender: {pet.gender}</Text>
       <Text className="mt-1">Contact: {pet.contact.email}</Text>
