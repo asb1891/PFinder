@@ -1,9 +1,11 @@
 import {
   ActivityIndicator,
-  StyleSheet,
   Text,
-  SafeAreaView, 
-  Button
+  SafeAreaView,
+  Button,
+  View,
+  StyleSheet,
+  Image
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import PetSwiper from "./components/PetCard";
@@ -16,10 +18,10 @@ const HomeScreen = ({ navigation, route }) => {
   const [page, setPage] = useState(1); //Current page number
 
   // Function to fetch pets
-  const fetchPets = async (pageNumber = 1, queryParams = '') => {
+  const fetchPets = async (pageNumber = 1, queryParams = "") => {
     setIsFetchingMore(true); //Set the fetching more indicator to true
     const params = new URLSearchParams(queryParams); // Create a new URLSearchParams object
-    params.set('page', pageNumber); // Use `set` to ensure the page number is always set correctly
+    params.set("page", pageNumber); // Use `set` to ensure the page number is always set correctly
     const url = `http://localhost:4000/api/pets?${params.toString()}`; // Create the URL to fetch the pets from
 
     console.log(`Fetching pets from: ${url}`);
@@ -27,8 +29,8 @@ const HomeScreen = ({ navigation, route }) => {
     try {
       const response = await fetch(url); // Fetch the pets
       const data = await response.json(); // Parse the JSON response
-      setPets(prevPets => pageNumber === 1 ? data : [...prevPets, ...data]); // Add the new pets to the pets array
-      setPage(prevPage => data.length > 0 ? pageNumber : prevPage); // Set the page number to 1 if there are no more pets
+      setPets((prevPets) => (pageNumber === 1 ? data : [...prevPets, ...data])); // Add the new pets to the pets array
+      setPage((prevPage) => (data.length > 0 ? pageNumber : prevPage)); // Set the page number to 1 if there are no more pets
     } catch (error) {
       console.error("Error fetching pets: ", error);
     } finally {
@@ -37,7 +39,7 @@ const HomeScreen = ({ navigation, route }) => {
   };
   // Effect for initial fetch and when search parameters change
   useEffect(() => {
-    const queryParams = route.params?.queryParams || ''; // Get the search parameters from the route
+    const queryParams = route.params?.queryParams || ""; // Get the search parameters from the route
     fetchPets(1, queryParams); // Fetch the pets with the search parameters
     // Reset the pets array and page state when search parameters change
     return () => {
@@ -53,7 +55,7 @@ const HomeScreen = ({ navigation, route }) => {
       fetchPets(page); // Fetch more pets
     }
   };
-// Function to handle swiping to fetch more pets when nearing end of the swiper
+  // Function to handle swiping to fetch more pets when nearing end of the swiper
   const handleSwipe = (cardIndex) => {
     // Fetch more pets when nearing the end of the swiper stack
     if (cardIndex === pets.length - 10) {
@@ -62,39 +64,23 @@ const HomeScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Button title="Sign Out" onPress={logout} />
+    <SafeAreaView className="flex-1 pt-[50px] pb-4 px-2 bg-white">
+      
       {isFetchingMore && <ActivityIndicator size="large" color="#00ff00" />}
       {pets.length > 0 ? (
-        <PetSwiper pets={pets} onSwipe={handleSwipe} />
+        <View className="justify-items-center mb-7">
+          {/* <Button title="Sign Out" onPress={logout} className="mb-2 mt-4" /> */}
+          <PetSwiper pets={pets} onSwipe={handleSwipe} />
+        </View>
       ) : (
-        !isFetchingMore && <Text>No pets available.</Text>
+        !isFetchingMore && (
+          <Text className="text-lg font-bold m-4 text-center">
+            No pets available.
+          </Text>
+        )
       )}
     </SafeAreaView>
   );
 };
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 20,
-    backgroundColor: "white",
-  },
-  horizontal: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 10,
-  },
-  logoutButton: {
-    margin: 10,
-    backgroundColor: "#000",
-    fontSize: 10,
-    borderRadius: 5,
-    padding: 10,
-    
-  },
-});
 
 export default HomeScreen;
