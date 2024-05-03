@@ -46,7 +46,7 @@ const PetCard = ({ pet }) => {
       <Text className="mt-1">Age: {pet.age}</Text>
       <Text className="mt-1">Gender: {pet.gender}</Text>
       <Text className="mt-1">Contact: {pet.contact.email}</Text>
-      <Text className="mt-1">Zip Code: {pet.contact.address.postcode}</Text>
+      <Text className="mt-1">Location: {pet.contact.address.city}, {pet.contact.address.state} {pet.contact.address.postcode}</Text>
       
     </TouchableOpacity>
   );
