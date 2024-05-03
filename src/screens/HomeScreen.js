@@ -4,8 +4,6 @@ import {
   SafeAreaView,
   Button,
   View,
-  StyleSheet,
-  Image
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import PetSwiper from "./components/PetCard";
