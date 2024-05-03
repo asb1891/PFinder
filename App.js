@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SearchSettings from "./src/screens/SearchSettings";
 import LoginScreen from "./src/screens/LoginScreen";
 import { Image } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
@@ -50,6 +51,9 @@ const AppContent = () => {
                 }}
               />
             ),
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="home" color={color} size={size} />
+            ),
           }}
         />
         <Tab.Screen
@@ -67,10 +71,13 @@ const AppContent = () => {
                 }}
               />
             ),
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="paw" color={color} size={size} />
+            ),
           }}
         />
         <Tab.Screen
-          name="Search Settings"
+          name="Search Preferences"
           component={SearchSettings}
           options={{
             headerTitle: () => (
@@ -83,6 +90,9 @@ const AppContent = () => {
                   alignSelf: "center",
                 }}
               />
+            ),
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="search" color={color} size={size} />
             ),
           }}
         />
