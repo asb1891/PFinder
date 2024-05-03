@@ -74,7 +74,7 @@ const HomeScreen = ({ navigation, route }) => {
               <PetSwiper pets={pets} onSwipe={handleSwipe} />
             </View>
           ) : (
-            <Text className="text-lg font-bold m-4 text-center">
+            <Text className="flex-1 justify-center items-center">
               No pets available.
             </Text>
           )}
