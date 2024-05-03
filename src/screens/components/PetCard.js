@@ -21,35 +21,39 @@ const PetCard = ({ pet }) => {
   const handlePhotoChange = debounce(() => {
     const nextIndex = (currentPhotoIndex + 1) % pet.photos.length; // loop back to 0 if at the end of the array
     setCurrentPhotoIndex(nextIndex); // Update the current photo index
-  }, 400); // Call the function after 400ms
+  }, 100); // Call the function after 400ms
 
   return (
     <TouchableOpacity
       onPress={handlePhotoChange}
-      className="m-1 border-2 border-neutral-300 p-3.5 rounded-lg bg-orange-100 shadow-md elevation-2"
+      className="m-4 rounded-lg shadow overflow-hidden relative"
+      style={{ height: 650 }} // Set a fixed height for consistency
     >
+      
       <Image
-        className="w-full h-[500px] mb-0.5 rounded-lg border-2 border-neutral-300"
+        className="absolute top-0 left-0 w-full h-full"
         source={{ uri: pet.photos[currentPhotoIndex]?.medium }}
+        resizeMode="cover"
       />
-      <View className="flex-row justify-center mt-1">
-        {pet.photos.map((_, idx) => (
-          <View
-            key={idx} // Create a dot for each photo
-            className={`h-3 w-3 mx-1 rounded-full ${
-              idx === currentPhotoIndex ? "bg-orange-500" : "bg-gray-300" // Set the background color of the dot to orange if it's the current photo index
-            }`}
-          ></View>
-        ))}
+      <View className="flex-row justify-center mt-5 mb-2">
+          {pet.photos.map((_, idx) => (
+            <View
+              key={idx}
+              className={`h-2 w-2 mx-1 rounded-full ${
+                idx === currentPhotoIndex ? 'bg-red-400' : 'bg-black'
+              }`}
+            />
+          ))}
+        </View>
+      <View className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
+        <Text className="text-lg font-bold text-white">{pet.name}</Text>
+        <Text className="text-white">Age: {pet.age}</Text>
+        <Text className="text-white">Gender: {pet.gender}</Text>
+        <Text className="text-white">Contact: {pet.contact.email}</Text>
+        <Text className="text-white">
+          Location: {pet.contact.address.city}, {pet.contact.address.state} {pet.contact.address.postcode}
+        </Text>
       </View>
-      <Text className="text-lg font-bold italic text-red-600">{pet.name}</Text>
-      <Text className="mt-1">Age: {pet.age}</Text>
-      <Text className="mt-1">Gender: {pet.gender}</Text>
-      <Text className="mt-1">Contact: {pet.contact.email}</Text>
-      <Text className="mt-1">
-        Location: {pet.contact.address.city}, {pet.contact.address.state}{" "}
-        {pet.contact.address.postcode}
-      </Text>
     </TouchableOpacity>
   );
 };
