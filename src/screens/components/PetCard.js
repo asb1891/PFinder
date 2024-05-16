@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import Swiper from "react-native-deck-swiper";
+import { usePets } from '../../../PetsContext';
+
 
 const debounce = (func, delay) => {
   let inDebounce; // This is the timer
@@ -60,6 +62,10 @@ const PetCard = ({ pet }) => {
 
 //Creating a PetSwiper component to display the pets in a swipeable deck
 const PetSwiper = ({ pets }) => {
+
+  const { handleSavePet } = usePets();
+
+
   return (
     <View>
       <Swiper
@@ -75,6 +81,8 @@ const PetSwiper = ({ pets }) => {
         }} //
         onSwipedRight={(cardIndex) => {
           console.log("Swiped right", cardIndex);
+          const pet = pets[cardIndex];
+          handleSavePet(pets[cardIndex]);
         }}
         cardIndex={0}
         backgroundColor={"white"}
