@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   Text,
   SafeAreaView,
-  Button,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -14,6 +13,8 @@ const HomeScreen = ({ navigation, route }) => {
   const { logout } = useAuth(); //Pass the logout function to the useAuth hook
   const [isFetchingMore, setIsFetchingMore] = useState(false); //Fetching more pets indicator
   const [page, setPage] = useState(1); //Current page number
+
+
 
   // Function to fetch pets
   const fetchPets = async (pageNumber = 1, queryParams = "") => {
@@ -71,7 +72,7 @@ const HomeScreen = ({ navigation, route }) => {
         <View className="flex-1">
           {pets.length > 0 ? (
             <View className="justify-items-center mb-7">
-              <PetSwiper pets={pets} onSwipe={handleSwipe} />
+              <PetSwiper pets={pets} />
             </View>
           ) : (
             <Text className="flex-1 justify-center items-center">
