@@ -8,16 +8,19 @@ import SearchSettings from "./src/screens/SearchSettings";
 import LoginScreen from "./src/screens/LoginScreen";
 import { Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { PetsProvider } from "./PetsContext";
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
+    <PetsProvider>
     <NavigationContainer>
       <AuthProvider>
         <AppContent />
       </AuthProvider>
     </NavigationContainer>
+    </PetsProvider>
   );
 }
 
