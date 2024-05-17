@@ -3,6 +3,10 @@ import { View, TouchableOpacity, Text, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import Icon from "react-native-vector-icons/FontAwesome";
+import useAuth from "../../hooks/useAuth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { FIREBASE_AUTH } from '../../database/firebase';
+
 
 const SearchSettings = () => {
   const [searchParams, setSearchParams] = useState({
@@ -18,8 +22,9 @@ const SearchSettings = () => {
   });
 
   const [location, setLocation] = useState(null);
-  const [radius, setRadius] = useState('25');
+  const [radius, setRadius] = useState("25");
   const navigation = useNavigation();
+  const { logout } = useAuth(); //Pass the logout function to the useAuth hook
 
   useEffect(() => {
     (async () => {
@@ -34,9 +39,21 @@ const SearchSettings = () => {
   }, []);
 
   const handleSearch = () => {
-    let types = ["Dog", "Cat", "Bird"].filter(type => searchParams[type]);
-    let ageParam = searchParams.Young ? 'Young' : searchParams.Adult ? 'Adult' : searchParams.Baby ? 'Baby' : searchParams.Mature ? 'Mature' : '';
-    let genderParam = searchParams.Male ? 'Male' : searchParams.Female ? 'Female' : '';
+    let types = ["Dog", "Cat", "Bird"].filter((type) => searchParams[type]);
+    let ageParam = searchParams.Young
+      ? "Young"
+      : searchParams.Adult
+      ? "Adult"
+      : searchParams.Baby
+      ? "Baby"
+      : searchParams.Mature
+      ? "Mature"
+      : "";
+    let genderParam = searchParams.Male
+      ? "Male"
+      : searchParams.Female
+      ? "Female"
+      : "";
     let queryParams = `type=${types.join(",")}&gender=${genderParam}`;
     if (location) {
       queryParams += `&latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&radius=${radius}`;
@@ -45,60 +62,116 @@ const SearchSettings = () => {
   };
 
   const toggleSearchParam = (param) => {
-    setSearchParams(currentParams => ({
+    setSearchParams((currentParams) => ({
       ...currentParams,
       [param]: !currentParams[param],
     }));
   };
 
+  const handleLogout = async (navigation) => {
+    try {
+      await firebase.auth().signOut();
+      Alert.alert('Logged out', 'You have been logged out successfully');
+      navigation.navigate('Login'); // Navigate to the login screen upon successful logout
+    } catch (error) {
+      console.error('Error logging out: ', error);
+      Alert.alert('Error', 'Error logging out. Please try again.');
+    }
+  };
+
   return (
     <View className="flex-1 bg-white p-5">
       {/* Dogs */}
-      <TouchableOpacity onPress={() => toggleSearchParam('Dog')} className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow">
+      <TouchableOpacity
+        onPress={() => toggleSearchParam("Dog")}
+        className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
+      >
         <Icon name="paw" size={20} color="#4B5563" className="mr-2" />
         <Text className="flex-1 text-lg">Dog</Text>
-        <View className={`w-5 h-5 rounded-full ${searchParams.Dog ? 'bg-yellow-400' : 'bg-transparent'} border border-yellow-400`}/>
+        <View
+          className={`w-5 h-5 rounded-full ${
+            searchParams.Dog ? "bg-yellow-400" : "bg-transparent"
+          } border border-yellow-400`}
+        />
       </TouchableOpacity>
       {/* Cats */}
-      <TouchableOpacity onPress={() => toggleSearchParam('Cat')} className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow">
+      <TouchableOpacity
+        onPress={() => toggleSearchParam("Cat")}
+        className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
+      >
         <Icon name="paw" size={20} color="#4B5563" className="mr-2" />
         <Text className="flex-1 text-lg">Cat</Text>
-        <View className={`w-5 h-5 rounded-full ${searchParams.Cat ? 'bg-yellow-400' : 'bg-transparent'} border border-yellow-400`}/>
+        <View
+          className={`w-5 h-5 rounded-full ${
+            searchParams.Cat ? "bg-yellow-400" : "bg-transparent"
+          } border border-yellow-400`}
+        />
       </TouchableOpacity>
       {/* Birds */}
-      <TouchableOpacity onPress={() => toggleSearchParam('Bird')} className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow">
+      <TouchableOpacity
+        onPress={() => toggleSearchParam("Bird")}
+        className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
+      >
         <Icon name="paw" size={20} color="#4B5563" className="mr-2" />
         <Text className="flex-1 text-lg">Bird</Text>
-        <View className={`w-5 h-5 rounded-full ${searchParams.Bird ? 'bg-yellow-400' : 'bg-transparent'} border border-yellow-400`}/>
+        <View
+          className={`w-5 h-5 rounded-full ${
+            searchParams.Bird ? "bg-yellow-400" : "bg-transparent"
+          } border border-yellow-400`}
+        />
       </TouchableOpacity>
       {/* Male */}
-      <TouchableOpacity onPress={() => toggleSearchParam('Male')} className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow">
+      <TouchableOpacity
+        onPress={() => toggleSearchParam("Male")}
+        className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
+      >
         <Icon name="male" size={20} color="#4B5563" className="mr-2" />
         <Text className="flex-1 text-lg">Male</Text>
-        <View className={`w-5 h-5 rounded-full ${searchParams.Male ? 'bg-yellow-400' : 'bg-transparent'} border border-yellow-400`}/>
+        <View
+          className={`w-5 h-5 rounded-full ${
+            searchParams.Male ? "bg-yellow-400" : "bg-transparent"
+          } border border-yellow-400`}
+        />
       </TouchableOpacity>
       {/* Female */}
-      <TouchableOpacity onPress={() => toggleSearchParam('Female')} className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow">
+      <TouchableOpacity
+        onPress={() => toggleSearchParam("Female")}
+        className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
+      >
         <Icon name="female" size={20} color="#4B5563" className="mr-2" />
         <Text className="flex-1 text-lg">Female</Text>
-        <View className={`w-5 h-5 rounded-full ${searchParams.Female ? 'bg-yellow-400' : 'bg-transparent'} border border-yellow-400`}/>
+        <View
+          className={`w-5 h-5 rounded-full ${
+            searchParams.Female ? "bg-yellow-400" : "bg-transparent"
+          } border border-yellow-400`}
+        />
       </TouchableOpacity>
       {/* Search Radius */}
       <View className="flex-row items-center p-3 mt-4 bg-white rounded-lg shadow">
         <Text className="flex-1 text-lg">Search Radius (miles):</Text>
-        <TextInput 
+        <TextInput
           className="border border-gray-300 p-2 rounded-lg"
           value={radius}
           onChangeText={setRadius}
-          keyboardType="numeric" 
+          keyboardType="numeric"
         />
       </View>
-      <TouchableOpacity onPress={handleSearch} className="bg-yellow-400 p-3 rounded-lg mt-6 items-center">
+      <TouchableOpacity
+        onPress={handleSearch}
+        className="bg-yellow-400 p-3 rounded-lg mt-6 items-center"
+      >
         <Text className="text-black text-lg">Update Search Filter</Text>
       </TouchableOpacity>
+      <View>
+        <TouchableOpacity
+          onPress={() => handleLogout(navigation)}
+          className="bg-red-500 p-3 rounded-lg mt-6 items-center"
+        >
+          <Text className="text-white text-lg">Logout</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 export default SearchSettings;
-
