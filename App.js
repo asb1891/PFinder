@@ -80,7 +80,7 @@ const AppContent = () => {
           }}
         />
         <Tab.Screen
-          name="Search Preferences"
+          name="Preferences"
           component={SearchSettings}
           options={{
             headerTitle: () => (
