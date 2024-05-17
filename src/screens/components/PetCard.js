@@ -29,7 +29,7 @@ const PetCard = ({ pet }) => {
     <TouchableOpacity
       onPress={handlePhotoChange}
       className="m-4 rounded-lg shadow overflow-hidden relative"
-      style={{ height: 650 }} // Set a fixed height for consistency
+      style={{ height: 600, flex: 'auto'}} // Set a fixed height for consistency
     >
       
       <Image
