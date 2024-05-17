@@ -62,7 +62,7 @@ const SavedPets = () => {
   };
 
   return (
-<ScrollView className="bg-white">
+<View className="bg-white flex-1">
       <Text className="text-center font-semibold text-lg my-2">Saved Pets</Text>
       <FlatList
         data={savedPets}
@@ -78,40 +78,76 @@ const SavedPets = () => {
           animationType="slide"
           onRequestClose={() => setSelectedPet(null)}
         >
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-            <View className="w-72 p-5 bg-white rounded-lg items-center border border-gray-200 shadow-lg">
-              <TouchableOpacity onPress={handlePhotoChange} className="h-72 mb-4">
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            <View
+              style={{
+                width: 300,
+                padding: 20,
+                backgroundColor: "white",
+                borderRadius: 10,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+                elevation: 5,
+              }}
+            >
+              <TouchableOpacity onPress={handlePhotoChange} className="mb-4">
                 <Image
                   source={{ uri: selectedPet.photos[currentPhotoIndex]?.large }}
-                  className="w-64 h-64 rounded-lg"
+                  style={{
+                    width: 250,
+                    height: 250,
+                    borderRadius: 10,
+                    marginBottom: 10,
+                  }}
                 />
               </TouchableOpacity>
-              <View className="flex-row justify-center mt-2 mb-4">
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginBottom: 10,
+                }}
+              >
                 {selectedPet.photos.map((_, idx) => (
                   <View
                     key={idx}
-                    className={`h-2 w-2 mx-1 rounded-full ${idx === currentPhotoIndex ? 'bg-red-400' : 'bg-black'}`}
+                    style={{
+                      height: 10,
+                      width: 10,
+                      marginHorizontal: 5,
+                      borderRadius: 5,
+                      backgroundColor: idx === currentPhotoIndex ? "red" : "black",
+                    }}
                   />
                 ))}
               </View>
-              <Text className="text-center text-lg mt-2">{selectedPet.name}</Text>
-              <Text className="text-center text-sm">{selectedPet.age}</Text>
-              <Text className="text-center text-sm">{selectedPet.gender}</Text>
-              <Text className="text-center text-sm">{selectedPet.contact.email}</Text>
-              <Text className="text-center text-sm">
+              <Text style={{ fontSize: 18, fontWeight: "bold", textAlign: "center", marginBottom: 5 }}>{selectedPet.name}</Text>
+              <Text style={{ fontSize: 14, textAlign: "center", marginBottom: 5 }}>{selectedPet.age}</Text>
+              <Text style={{ fontSize: 14, textAlign: "center", marginBottom: 5 }}>{selectedPet.gender}</Text>
+              <Text style={{ fontSize: 14, textAlign: "center", marginBottom: 5 }}>{selectedPet.contact.email}</Text>
+              <Text style={{ fontSize: 14, textAlign: "center", marginBottom: 15 }}>
                 Location: {selectedPet.contact.address.city}, {selectedPet.contact.address.state} {selectedPet.contact.address.postcode}
               </Text>
-              <TouchableOpacity onPress={sendEmail} className="mt-5 bg-yellow-400 py-2 px-5 rounded">
-                <Text className="text-white text-lg">Send Email</Text>
+              <TouchableOpacity onPress={sendEmail} style={{ backgroundColor: "#facc15", paddingVertical: 10, paddingHorizontal: 20, borderRadius: 5, marginBottom: 10 }}>
+                <Text style={{ color: "white", fontSize: 16, textAlign: "center" }}>Send Email</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => setSelectedPet(null)} className="mt-5 bg-red-500 py-2 px-5 rounded">
-                <Text className="text-white text-lg">Close</Text>
+              <TouchableOpacity onPress={() => setSelectedPet(null)} style={{ backgroundColor: "#d9534f", paddingVertical: 10, paddingHorizontal: 20, borderRadius: 5 }}>
+                <Text style={{ color: "white", fontSize: 16, textAlign: "center" }}>Close</Text>
               </TouchableOpacity>
             </View>
           </View>
         </Modal>
       )}
-    </ScrollView>
+    </View>
   );
 }
 
