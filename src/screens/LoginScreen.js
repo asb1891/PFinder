@@ -1,17 +1,28 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Image } from 'react-native';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { FIREBASE_AUTH } from '../../database/firebase';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from "react";
+import {
+  View,
+  TextInput,
+  Button,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import { FIREBASE_AUTH } from "../../database/firebase";
+import { useNavigation } from "@react-navigation/native";
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState(''); //Email input
-  const [password, setPassword] = useState(''); //Password input
+  const [email, setEmail] = useState(""); //Email input
+  const [password, setPassword] = useState(""); //Password input
   const [loading, setLoading] = useState(false); //Loading indicator
   const navigation = useNavigation(); //Pass the navigation function to the useNavigation hook
 
-
-  const auth = FIREBASE_AUTH; //Get the auth object from the database; 
+  const auth = FIREBASE_AUTH; //Get the auth object from the database;
 
   //Handle the login button logic
   const handleLogin = async () => {
@@ -21,10 +32,10 @@ const LoginScreen = () => {
       const response = await signInWithEmailAndPassword(auth, email, password); //Sign in with email and password
       console.log(response);
       // Navigate to the home screen
-      navigation.navigate('Home'); //Navigate to the home screen
-      console.log("navigating")
+      navigation.navigate("Home"); //Navigate to the home screen
+      console.log("navigating");
     } catch (error) {
-      console.log("navigation error");;
+      console.log("navigation error");
     } finally {
       setLoading(false);
     }
@@ -34,25 +45,29 @@ const LoginScreen = () => {
     setLoading(true);
     try {
       // Sign up with email and password
-      const response = await createUserWithEmailAndPassword(auth, email, password); //Sign up with email and password
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      ); //Sign up with email and password
       console.log(response);
-      alert('Sign Up Success');
-      navigation.navigate('Home'); //Navigate to the home screen
-      console.log(navigation)
+      alert("Sign Up Success");
+      navigation.navigate("Home"); //Navigate to the home screen
+      console.log(navigation);
     } catch (error) {
       console.log(error);
-      alert('Sign Up Failed' + error.message);
+      alert("Sign Up Failed" + error.message);
     } finally {
       setLoading(false);
     }
   };
-  
-
-
 
   return (
     <View style={styles.container}>
-      <Image source={require('../../assets/PetSwipeLogo.png')} style={styles.logo} />
+      <Image
+        source={require("../../assets/PetSwipeLogo.png")}
+        style={styles.logo}
+      />
       <TextInput
         style={styles.input}
         onChangeText={setEmail}
@@ -67,12 +82,22 @@ const LoginScreen = () => {
         placeholder="Password"
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
-      <Button 
-      title = "Create Account"
-        style={styles.signUp}
-        onPress={signUp}>
-      </Button>
+      <View>
+        <TouchableOpacity
+          className="bg-yellow-400 p-3 rounded-lg mt-6 items-center"
+          onPress={handleLogin}
+        >
+          <Text className="text-white text-lg">Login</Text>
+        </TouchableOpacity>
+      </View>
+      <View>
+        <TouchableOpacity
+          className="bg-blue-500 p-3 rounded-lg mt-6 items-center"
+          onPress={signUp}
+        >
+          <Text className="text-white text-lg">Sign Up</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -80,15 +105,16 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 20,
+    backgroundColor: "white",
   },
   logo: {
-    width: 100,
-    height: 100,
-    resizeMode: 'contain',
-    alignSelf: 'center',
-    marginTop: 20,
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+    alignSelf: "center",
+    marginBottom: 20,
   },
   input: {
     height: 40,
@@ -98,12 +124,12 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     marginTop: 10,
-    color: 'blue',
+    color: "blue",
   },
   signUp: {
     marginTop: 10,
-    color: 'red'
-  }
+    color: "red",
+  },
 });
 
 export default LoginScreen;
