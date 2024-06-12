@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import Swiper from "react-native-deck-swiper";
-import { usePets } from '../../../PetsContext';
+import { usePets } from "../../../PetsContext";
 
 const debounce = (func, delay) => {
   let inDebounce;
@@ -19,37 +19,43 @@ const PetCard = ({ pet }) => {
   const handlePhotoChange = debounce(() => {
     const nextIndex = (currentPhotoIndex + 1) % pet.photos.length;
     setCurrentPhotoIndex(nextIndex);
-  }, 100);
+  }, 400);
 
   return (
     <TouchableOpacity
       onPress={handlePhotoChange}
       className="m-4 rounded-lg shadow-lg overflow-hidden relative"
-      style={{ height: 600, flex: "auto" }}
+      style={{ height: 600, flex: "auto"}}
     >
       <Image
         className="absolute top-0 left-0 w-full h-full"
         source={{ uri: pet.photos[currentPhotoIndex]?.medium }}
         resizeMode="cover"
       />
-      <View className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
-        <View className="flex-row justify-center mt-5 mb-2">
-          {pet.photos.map((_, idx) => (
-            <View
-              key={idx}
-              className={`h-2 w-2 mx-1 rounded-full ${
-                idx === currentPhotoIndex ? "bg-red-400" : "bg-white"
-              }`}
-            />
-          ))}
-        </View>
+      <View className="flex-row justify-center mb-1">
+        {pet.photos.map((_, idx) => (
+          <View
+            key={idx}
+            className={`h-2 w-2 mx-1 rounded-full mt-4 ${
+              idx === currentPhotoIndex ? "bg-red-400" : "bg-white"
+            }`}
+          />
+        ))}
+      </View>
+      <View
+        className="absolute bottom-0 left-0 right-0 p-4"
+        style={{
+          backgroundColor: 'rgba(0, 0, 0, 0.5)', // Add a semi-transparent background
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+        }}
+      >
         <Text className="text-xl font-bold text-white">{pet.name}</Text>
         <Text className="text-white mt-1">Age: {pet.age}</Text>
         <Text className="text-white mt-1">Gender: {pet.gender}</Text>
         <Text className="text-white mt-1">Contact: {pet.contact.email}</Text>
         <Text className="text-white mt-1">
-          Location: {pet.contact.address.city}, {pet.contact.address.state}{" "}
-          {pet.contact.address.postcode}
+          Location: {pet.contact.address.city}, {pet.contact.address.state} {pet.contact.address.postcode}
         </Text>
       </View>
     </TouchableOpacity>
@@ -60,7 +66,7 @@ const PetSwiper = ({ pets }) => {
   const { handleSavePet } = usePets();
 
   return (
-    <View>
+    <View className="flex-1 justify-center items-center w-full">
       <Swiper
         cards={pets}
         renderCard={(card) =>
@@ -86,4 +92,3 @@ const PetSwiper = ({ pets }) => {
 };
 
 export default PetSwiper;
-
