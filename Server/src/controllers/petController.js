@@ -24,7 +24,8 @@ async function fetchAnimals(token, searchParams) {
         gender: animal.gender,
         photos: animal.photos,
         contact: animal.contact,
-        description: animal.description
+        description: animal.description,
+        tags: animal.tags
     }));
 }
 //Controller function to handle requests for pet data
@@ -65,6 +66,11 @@ export const getPets = async (req, res) => {
                 age: req.query.age,
                 gender: req.query.gender,
                 breed: req.query.breed,
+                size: req.query.size,
+                tags: req.query.tags,
+                species: req.query.species,
+                status: req.query.status,
+                color: req.query.color,
                 size: req.query.size,
                 distance: radius,
                 location: `${latitude},${longitude}`, // Pass the latitude and longitude as a single string
