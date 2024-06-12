@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text, TextInput } from "react-native";
+import { View, TouchableOpacity, Text, TextInput, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import Icon from "react-native-vector-icons/FontAwesome";
-import useAuth from "../../hooks/useAuth";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { FIREBASE_AUTH } from '../../database/firebase';
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import useAuth from "../../hooks/useAuth";;
+import { FIREBASE_AUTH } from "../../database/firebase";
+import { getAuth, signOut } from "firebase/auth";
 
+const auth = FIREBASE_AUTH; //Get the auth object from the database;
 
 const SearchSettings = () => {
+  
+  //set the search params to false
   const [searchParams, setSearchParams] = useState({
     Dog: false,
     Cat: false,
@@ -21,11 +26,13 @@ const SearchSettings = () => {
     Mature: false,
   });
 
-  const [location, setLocation] = useState(null);
-  const [radius, setRadius] = useState("25");
-  const navigation = useNavigation();
+  const [location, setLocation] = useState(null); //Location state
+  const [radius, setRadius] = useState("25"); //default radius
+  const navigation = useNavigation(); //navigation hook
   const { logout } = useAuth(); //Pass the logout function to the useAuth hook
+  const [loading, setLoading] = useState(false); //Loading indicator
 
+  //Get the current location
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -38,6 +45,7 @@ const SearchSettings = () => {
     })();
   }, []);
 
+  //Function to handle the search
   const handleSearch = () => {
     let types = ["Dog", "Cat", "Bird"].filter((type) => searchParams[type]);
     let ageParam = searchParams.Young
@@ -60,22 +68,26 @@ const SearchSettings = () => {
     }
     navigation.navigate("Home", { queryParams });
   };
-
+  //
   const toggleSearchParam = (param) => {
     setSearchParams((currentParams) => ({
       ...currentParams,
       [param]: !currentParams[param],
     }));
   };
-
-  const handleLogout = async (navigation) => {
+  //function to handle logging out the user
+  const handleLogout = async () => {
+    const auth = FIREBASE_AUTH; // Get the auth object from the database
+    setLoading(true);
     try {
-      await firebase.auth().signOut();
+      await signOut(auth); // Sign out the user
       Alert.alert('Logged out', 'You have been logged out successfully');
-      navigation.navigate('Login'); // Navigate to the login screen upon successful logout
+      navigation.navigate('LoginScreen'); // Navigate to the login screen upon successful logout
     } catch (error) {
-      console.error('Error logging out: ', error);
+      // console.error('Error logging out: ', error);
       Alert.alert('Error', 'Error logging out. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -86,8 +98,8 @@ const SearchSettings = () => {
         onPress={() => toggleSearchParam("Dog")}
         className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
       >
-        <Icon name="paw" size={20} color="#4B5563" className="mr-2" />
-        <Text className="flex-1 text-lg">Dog</Text>
+        <FontAwesome5 name="dog" size={20} color="#4B5563" className="mr-2" />
+        <Text className="flex-1 text-lg"> Dog</Text>
         <View
           className={`w-5 h-5 rounded-full ${
             searchParams.Dog ? "bg-yellow-400" : "bg-transparent"
@@ -99,8 +111,8 @@ const SearchSettings = () => {
         onPress={() => toggleSearchParam("Cat")}
         className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
       >
-        <Icon name="paw" size={20} color="#4B5563" className="mr-2" />
-        <Text className="flex-1 text-lg">Cat</Text>
+        <FontAwesome5 name="cat" size={20} color="#4B5563" className="mr-2" />
+        <Text className="flex-1 text-lg"> Cat</Text>
         <View
           className={`w-5 h-5 rounded-full ${
             searchParams.Cat ? "bg-yellow-400" : "bg-transparent"
@@ -112,8 +124,8 @@ const SearchSettings = () => {
         onPress={() => toggleSearchParam("Bird")}
         className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
       >
-        <Icon name="paw" size={20} color="#4B5563" className="mr-2" />
-        <Text className="flex-1 text-lg">Bird</Text>
+        <FontAwesome name="twitter" size={20} color="#4B5563" className="mr-2" />
+        <Text className="flex-1 text-lg"> Bird</Text>
         <View
           className={`w-5 h-5 rounded-full ${
             searchParams.Bird ? "bg-yellow-400" : "bg-transparent"
@@ -126,7 +138,7 @@ const SearchSettings = () => {
         className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
       >
         <Icon name="male" size={20} color="#4B5563" className="mr-2" />
-        <Text className="flex-1 text-lg">Male</Text>
+        <Text className="flex-1 text-lg"> Male</Text>
         <View
           className={`w-5 h-5 rounded-full ${
             searchParams.Male ? "bg-yellow-400" : "bg-transparent"
@@ -139,7 +151,7 @@ const SearchSettings = () => {
         className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
       >
         <Icon name="female" size={20} color="#4B5563" className="mr-2" />
-        <Text className="flex-1 text-lg">Female</Text>
+        <Text className="flex-1 text-lg"> Female</Text>
         <View
           className={`w-5 h-5 rounded-full ${
             searchParams.Female ? "bg-yellow-400" : "bg-transparent"
@@ -164,7 +176,7 @@ const SearchSettings = () => {
       </TouchableOpacity>
       <View>
         <TouchableOpacity
-          onPress={() => handleLogout(navigation)}
+          onPress={handleLogout}
           className="bg-red-500 p-3 rounded-lg mt-6 items-center"
         >
           <Text className="text-white text-lg">Logout</Text>
