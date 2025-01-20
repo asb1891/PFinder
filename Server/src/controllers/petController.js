@@ -1,13 +1,19 @@
 import dotenv from 'dotenv';
 import axios from 'axios';
+// const { createUser } = require('../../database/postgres/queries');
+import { getPetFinderToken } from '../utils/tokenManager.js';
+import { saveSwipedPet, getSavedPets } from '../databae/postgres/queries.js';
 
 dotenv.config();
 
-const token = process.env.PETFINDER_TOKEN
+// const token = process.env.PETFINDER_TOKEN
 
-async function fetchAnimals(token, searchParams) {
+
+
+async function fetchAnimals(searchParams) {
+    const petfinderAccessToken = await getPetFinderToken(); //get the latest token
     const petResponse = await axios.get(`https://api.petfinder.com/v2/animals`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${petfinderAccessToken}` },
         params: searchParams
     });
 
@@ -31,11 +37,12 @@ async function fetchAnimals(token, searchParams) {
 //Controller function to handle requests for pet data
 export const getPets = async (req, res) => {
     try {
+        const token = await getPetFinderToken(); // Get the Petfinder token
         console.log('Bearer Token:', token);
 
         // Parse page, limit, and radius from query parameters
-        const page = req.query.page || 1;
-        const limit = req.query.limit || 100;
+        const page = req.query.page || 1; // Default page number
+        const limit = req.query.limit || 100; // Default limit
         const radius = req.query.radius || '25'; // Default radius in miles
         
         // Additional parameters for location-based search
@@ -76,7 +83,7 @@ export const getPets = async (req, res) => {
                 location: `${latitude},${longitude}`, // Pass the latitude and longitude as a single string
             };
 
-            const animals = await fetchAnimals(token, searchParams); // Fetch the animals for the current type
+            const animals = await fetchAnimals(searchParams); // Fetch the animals for the current type
             allAnimals = allAnimals.concat(animals); // Accumulate the results
         }
 
@@ -84,6 +91,30 @@ export const getPets = async (req, res) => {
     } catch (error) {
         console.error('Failed to fetch pet data:', error.response ? error.response.data : error);
         res.status(500).json({ error: error.response ? error.response.data : error.message });
+    }
+};
+
+// Save a right-swiped pet to the database
+export const savePet = async (req, res) => {
+    try {
+        const pet = req.body; // Pet data sent from the frontend
+        await saveSwipedPet(pet); // Save the pet in PostgreSQL
+
+        res.status(201).json({ message: 'Pet saved successfully.' });
+    } catch (error) {
+        console.error('Error saving pet:', error.message);
+        res.status(500).json({ error: 'Failed to save pet.' });
+    }
+};
+
+// Retrieve saved pets from the database
+export const getAllSavedPets = async (req, res) => {
+    try {
+        const savedPets = await getSavedPets(); // Fetch pets from PostgreSQL
+        res.status(200).json(savedPets);
+    } catch (error) {
+        console.error('Error fetching saved pets:', error.message);
+        res.status(500).json({ error: 'Failed to fetch saved pets.' });
     }
 };
 
