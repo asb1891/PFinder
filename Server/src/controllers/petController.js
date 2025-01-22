@@ -1,14 +1,12 @@
 import dotenv from 'dotenv';
 import axios from 'axios';
-// const { createUser } = require('../../database/postgres/queries');
 import { getPetFinderToken } from '../utils/tokenManager.js';
-import { saveSwipedPet, getSavedPets } from '../databae/postgres/queries.js';
+import { saveSwipedPet, getSavedPets } from '../../database/postgres/queries.js';
+
+
+
 
 dotenv.config();
-
-// const token = process.env.PETFINDER_TOKEN
-
-
 
 async function fetchAnimals(searchParams) {
     const petfinderAccessToken = await getPetFinderToken(); //get the latest token
@@ -98,14 +96,17 @@ export const getPets = async (req, res) => {
 export const savePet = async (req, res) => {
     try {
         const pet = req.body; // Pet data sent from the frontend
+        console.log('Received pet data:', pet); // Log received pet data
         await saveSwipedPet(pet); // Save the pet in PostgreSQL
 
         res.status(201).json({ message: 'Pet saved successfully.' });
     } catch (error) {
-        console.error('Error saving pet:', error.message);
+        console.error('Error saving pet:', error.message); // Log the error message
+        console.error('Full error object:', error); // Log the full error object for debugging
         res.status(500).json({ error: 'Failed to save pet.' });
     }
 };
+
 
 // Retrieve saved pets from the database
 export const getAllSavedPets = async (req, res) => {
