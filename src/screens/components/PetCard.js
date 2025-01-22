@@ -12,13 +12,13 @@ const debounce = (func, delay) => {
     inDebounce = setTimeout(() => func.apply(context, args), delay);
   };
 };
-
+// Define the PetCard function
 const PetCard = ({ pet }) => {
-  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0); // Initialize the current photo index
+//Photo change function using debounce
   const handlePhotoChange = debounce(() => {
-    const nextIndex = (currentPhotoIndex + 1) % pet.photos.length;
-    setCurrentPhotoIndex(nextIndex);
+    const nextIndex = (currentPhotoIndex + 1) % pet.photos.length; // Loop back to 0 if at the end of the array
+    setCurrentPhotoIndex(nextIndex); // Update the current photo index
   }, 400);
 
   return (
@@ -29,10 +29,11 @@ const PetCard = ({ pet }) => {
     >
       <Image
         className="absolute top-0 left-0 w-full h-full"
-        source={{ uri: pet.photos[currentPhotoIndex]?.medium }}
+        source={{ uri: pet.photos[currentPhotoIndex]?.medium }} // Use the current photo
         resizeMode="cover"
       />
       <View className="flex-row justify-center mb-1">
+        {/* map through photos */}
         {pet.photos.map((_, idx) => (
           <View
             key={idx}
@@ -63,7 +64,7 @@ const PetCard = ({ pet }) => {
 };
 
 const PetSwiper = ({ pets }) => {
-  const { handleSavePet } = usePets();
+  const { handleSavePet } = usePets(); 
 
   return (
     <View className="flex-1 justify-center items-center w-full">
