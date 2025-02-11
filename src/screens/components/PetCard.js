@@ -1,73 +1,82 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Animated } from "react-native";
 import Swiper from "react-native-deck-swiper";
 import { usePets } from "../../../PetsContext";
+import styles from "../../assets/styles";
+import { LinearGradient } from "expo-linear-gradient";
 
+
+// debounce function to limit the number of calls to a function
 const debounce = (func, delay) => {
-  let inDebounce;
-  return function () {
-    const context = this;
-    const args = arguments;
-    clearImmediate(inDebounce);
-    inDebounce = setTimeout(() => func.apply(context, args), delay);
+  let timeout;
+  return (...args) => {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), delay);
   };
 };
 // Define the PetCard function
 const PetCard = ({ pet }) => {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0); // Initialize the current photo index
-//Photo change function using debounce
+  const fadeAnim = new Animated.Value(1) //fade effect on image change
+
+  //Photo change function using debounce
   const handlePhotoChange = debounce(() => {
-    const nextIndex = (currentPhotoIndex + 1) % pet.photos.length; // Loop back to 0 if at the end of the array
-    setCurrentPhotoIndex(nextIndex); // Update the current photo index
+    if (!pet.photo_urls || pet.photo_urls.length === 0) return;
+    Animated.sequence([
+      Animated.timing(fadeAnim, { toValue: 0, duration: 200, useNativeDriver: true }),
+      Animated.timing(fadeAnim, { toValue: 1, duration: 200, useNativeDriver: true }),
+    ]).start();
+
+    const nextIndex = (currentPhotoIndex + 1) % pet.photo_urls.length;
+    setCurrentPhotoIndex(nextIndex);
   }, 400);
 
+  console.log("Pet Data:", pet);
+
   return (
-    <TouchableOpacity
-      onPress={handlePhotoChange}
-      className="m-4 rounded-lg shadow-lg overflow-hidden relative"
-      style={{ height: 600, flex: "auto"}}
-    >
-      <Image
-        className="absolute top-0 left-0 w-full h-full"
-        source={{ uri: pet.photos[currentPhotoIndex]?.medium }} // Use the current photo
-        resizeMode="cover"
-      />
-      <View className="flex-row justify-center mb-1">
-        {/* map through photos */}
-        {pet.photos.map((_, idx) => (
+<View style={styles.cardWrapper}>
+    <View style={styles.cardContainer}>
+      {/* Image */}
+      <TouchableOpacity onPress={handlePhotoChange} activeOpacity={0.8} style={styles.petImageContainer}>
+        <Image
+          source={{
+            uri: pet.photo_urls?.[currentPhotoIndex] || "https://via.placeholder.com/350",
+          }}
+          style={styles.petImage}
+        />
+      </TouchableOpacity>
+
+      {/* Dots Indicator */}
+      <View style={styles.dotsContainer}>
+        {(pet.photo_urls || []).map((_, index) => (
           <View
-            key={idx}
-            className={`h-2 w-2 mx-1 rounded-full mt-4 ${
-              idx === currentPhotoIndex ? "bg-red-400" : "bg-white"
-            }`}
+            key={index}
+            style={[
+              styles.dot,
+              { backgroundColor: index === currentPhotoIndex ? "#FF6B6B" : "#D9D9D9" },
+            ]}
           />
         ))}
       </View>
-      <View
-        className="absolute bottom-0 left-0 right-0 p-4"
-        style={{
-          backgroundColor: 'rgba(0, 0, 0, 0.5)', // Add a semi-transparent background
-          borderTopLeftRadius: 10,
-          borderTopRightRadius: 10,
-        }}
-      >
-        <Text className="text-xl font-bold text-white">{pet.name}</Text>
-        <Text className="text-white mt-1">Age: {pet.age}</Text>
-        <Text className="text-white mt-1">Gender: {pet.gender}</Text>
-        <Text className="text-white mt-1">Contact: {pet.contact.email}</Text>
-        <Text className="text-white mt-1">
-          Location: {pet.contact.address.city}, {pet.contact.address.state} {pet.contact.address.postcode}
-        </Text>
+
+      {/* Pet Details */}
+      <View style={styles.petInfoContainer}>
+        <Text style={styles.petName}>{pet.name}</Text>
+        <Text style={styles.petInfo}>🐾 Age: {pet.age}</Text>
+        <Text style={styles.petInfo}>🧑‍🦰 Gender: {pet.gender}</Text>
+        <Text style={styles.petInfo}>📍 {pet.contact.address.city}, {pet.contact.address.state}</Text>
+        <Text style={styles.petContact}>✉️ {pet.contact.email}</Text>
       </View>
-    </TouchableOpacity>
-  );
+    </View>
+  </View>
+    );
 };
 
 const PetSwiper = ({ pets }) => {
-  const { handleSavePet } = usePets(); 
-
+  const { handleSavePet } = usePets();
+  const debouncedHandleSavePet = debounce(handleSavePet, 500);
   return (
-    <View className="flex-1 justify-center items-center w-full">
+    <View>
       <Swiper
         cards={pets}
         renderCard={(card) =>
@@ -80,16 +89,17 @@ const PetSwiper = ({ pets }) => {
           console.log("Swiped left", cardIndex);
         }}
         onSwipedRight={(cardIndex) => {
-          console.log("Swiped right", cardIndex);
+          console.log("swiped right", cardIndex);
           const pet = pets[cardIndex];
-          handleSavePet(pet);
+          debouncedHandleSavePet(pet);
         }}
         cardIndex={0}
         backgroundColor={"white"}
-        stackSize={25}
+        stackSize={1}
       />
     </View>
   );
 };
 
 export default PetSwiper;
+
