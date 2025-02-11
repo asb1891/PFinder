@@ -23,52 +23,59 @@ const debounce = (func, delay) => {
   };
 };
 
+// Define the SavedPets component
 const SavedPets = () => {
-  const { savedPets } = usePets();
-  const [selectedPet, setSelectedPet] = useState(null);
-  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const { savedPets } = usePets(); // Get the saved pets from the context
+  const [selectedPet, setSelectedPet] = useState(null); // Define the selected pet state
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0); // Initialize the current photo index
 
   const handlePhotoChange = debounce(() => {
-    const nextIndex = (currentPhotoIndex + 1) % selectedPet.photos.length; // loop back to 0 if at the end of the array
-    setCurrentPhotoIndex(nextIndex); // Update the current photo index
-  }, 200); // Call the function after 400ms
+    if (!selectedPet?.photo_urls?.length) return; // Prevent error
+    const nextIndex = (currentPhotoIndex + 1) % selectedPet.photo_urls.length;
+    setCurrentPhotoIndex(nextIndex);
+  }, 200);
 
   //Function to limit text in description to 2 sentences
   const truncateText = (text, sentenceCount) => {
-    if (!text) return ''; // If there is no text, return an empty string
+    if (!text) return ""; // If there is no text, return an empty string
     const sentences = text.match(/[^\.!\?]+[\.!\?]+/g); // Split the text into an array of sentences
     if (!sentences) return text; // If there are no sentences, return the original text
-    return sentences.slice(0, sentenceCount).join(' '); // Return the first sentenceCount sentences
+    return sentences.slice(0, sentenceCount).join(" "); // Return the first sentenceCount sentences
   };
+  // Rendering Pets photo
+  const renderItem = ({ item }) => {
+    const photoUri = item.photo_urls?.[0] || "https://via.placeholder.com/350";
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() => {
-        setSelectedPet(item);
-        setCurrentPhotoIndex(0);
-      }}
-      style={{
-        margin: 8,
-        width: "46%",
-        backgroundColor: "#facc15",
-        borderRadius: 10,
-        overflow: "hidden",
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-      }}
-    >
-      <Image
-        source={{ uri: item.photos[0]?.medium }}
-        style={{ width: "100%", height: 170 }}
-      />
-      <Text style={{ textAlign: "center", padding: 8, fontWeight: "bold" }}>
-        {item.name}
-      </Text>
-    </TouchableOpacity>
-  );
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setSelectedPet(item);
+          setCurrentPhotoIndex(0);
+        }}
+        style={{
+          margin: 8,
+          width: "46%",
+          backgroundColor: "#facc15",
+          borderRadius: 10,
+          overflow: "hidden",
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+        }}
+      >
+        <Image
+          source={{ uri: photoUri }}
+          style={{ width: "100%", height: 170 }}
+          resizeMode="cover"
+        />
+        <Text style={{ textAlign: "center", padding: 8, fontWeight: "bold" }}>
+          {item.name || "Unknown Name"} {/* Safeguard for missing name */}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   //function to send email via the saved pets card
   //linking to the default email client
@@ -108,8 +115,8 @@ const SavedPets = () => {
         Saved Pets
       </Text>
       <FlatList
-        data={savedPets}
-        keyExtractor={(item) => item.id.toString()}
+        data={savedPets || []} // Ensure savedPets is always an array
+        keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
         renderItem={renderItem}
         numColumns={2}
         contentContainerStyle={{ paddingHorizontal: 16 }}
@@ -147,13 +154,17 @@ const SavedPets = () => {
                 style={{ marginBottom: 15 }}
               >
                 <Image
-                  source={{ uri: selectedPet.photos[currentPhotoIndex]?.large }}
+                  source={{
+                    uri:
+                      selectedPet?.photo_urls?.[currentPhotoIndex] ||
+                      "https://via.placeholder.com/350",
+                  }}
                   style={{
                     width: 250,
                     height: 250,
                     borderRadius: 10,
                     marginBottom: 10,
-                    marginLeft: 5
+                    marginLeft: 5,
                   }}
                 />
               </TouchableOpacity>
@@ -164,16 +175,16 @@ const SavedPets = () => {
                   marginBottom: 15,
                 }}
               >
-                {selectedPet.photos.map((_, idx) => (
+                {selectedPet.photo_urls.map((photo, index) => (
                   <View
-                    key={idx}
+                    key={index}
                     style={{
                       height: 10,
                       width: 10,
                       marginHorizontal: 5,
                       borderRadius: 5,
                       backgroundColor:
-                        idx === currentPhotoIndex ? "red" : "black",
+                        index === currentPhotoIndex ? "red" : "black",
                     }}
                   />
                 ))}
@@ -184,7 +195,7 @@ const SavedPets = () => {
                   fontWeight: "bold",
                   textAlign: "center",
                   marginBottom: 5,
-                  fontFamily: "Arial"
+                  fontFamily: "Arial",
                 }}
               >
                 {selectedPet.name}
@@ -202,16 +213,23 @@ const SavedPets = () => {
               <Text
                 style={{ fontSize: 14, textAlign: "center", marginBottom: 5 }}
               >
-                {selectedPet.contact.email}
+                {selectedPet.contact?.email || "No email available"}
               </Text>
               <Text
                 style={{ fontSize: 14, textAlign: "center", marginBottom: 5 }}
               >
-                Location: {selectedPet.contact.address.city},{" "}
-                {selectedPet.contact.address.state}{" "}
-                {selectedPet.contact.address.postcode}
+                {selectedPet.contact?.address?.city || "Unknown City"},
+                {selectedPet.contact?.address?.state || "Unknown State"}{" "}
+                {selectedPet.contact?.address?.postcode || ""}
               </Text>
-              <Text style={{ fontSize: 14, textAlign: "center", marginBottom: 5, marginTop: 5 }}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  textAlign: "center",
+                  marginBottom: 5,
+                  marginTop: 5,
+                }}
+              >
                 {truncateText(selectedPet.description, 1)}
               </Text>
 
