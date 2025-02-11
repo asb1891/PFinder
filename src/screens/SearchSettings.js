@@ -3,16 +3,15 @@ import { View, TouchableOpacity, Text, TextInput, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import Icon from "react-native-vector-icons/FontAwesome";
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import useAuth from "../../hooks/useAuth";;
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import useAuth from "../../hooks/useAuth";
 import { FIREBASE_AUTH } from "../../database/firebase";
 import { getAuth, signOut } from "firebase/auth";
 
 const auth = FIREBASE_AUTH; //Get the auth object from the database;
 
 const SearchSettings = () => {
-  
   //set the search params to false
   const [searchParams, setSearchParams] = useState({
     Dog: false,
@@ -62,11 +61,19 @@ const SearchSettings = () => {
       : searchParams.Female
       ? "Female"
       : "";
-    let queryParams = `type=${types.join(",")}&gender=${genderParam}`;
-    if (location) {
-      queryParams += `&latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&radius=${radius}`;
-    }
-    navigation.navigate("Home", { queryParams });
+      let queryParams = [];
+
+      if (types.length > 0) queryParams.push(`type=${types.join(",")}`);
+      if (ageParam) queryParams.push(`age=${ageParam}`);
+      if (genderParam) queryParams.push(`gender=${genderParam}`);
+      if (location) {
+        queryParams.push(
+          `latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&radius=${radius}`
+        );
+      }
+      
+      const queryString = queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
+      navigation.navigate("Home", { queryParams: queryString });
   };
   //
   const toggleSearchParam = (param) => {
@@ -81,11 +88,11 @@ const SearchSettings = () => {
     setLoading(true);
     try {
       await signOut(auth); // Sign out the user
-      Alert.alert('Logged out', 'You have been logged out successfully');
-      navigation.navigate('LoginScreen'); // Navigate to the login screen upon successful logout
+      Alert.alert("Logged out", "You have been logged out successfully");
+      navigation.navigate("LoginScreen"); // Navigate to the login screen upon successful logout
     } catch (error) {
       // console.error('Error logging out: ', error);
-      Alert.alert('Error', 'Error logging out. Please try again.');
+      Alert.alert("Error", "Error logging out. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -124,7 +131,12 @@ const SearchSettings = () => {
         onPress={() => toggleSearchParam("Bird")}
         className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
       >
-        <FontAwesome name="twitter" size={20} color="#4B5563" className="mr-2" />
+        <FontAwesome
+          name="twitter"
+          size={20}
+          color="#4B5563"
+          className="mr-2"
+        />
         <Text className="flex-1 text-lg"> Bird</Text>
         <View
           className={`w-5 h-5 rounded-full ${
