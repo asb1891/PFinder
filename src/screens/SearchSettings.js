@@ -61,19 +61,20 @@ const SearchSettings = () => {
       : searchParams.Female
       ? "Female"
       : "";
-      let queryParams = [];
+    let queryParams = [];
 
-      if (types.length > 0) queryParams.push(`type=${types.join(",")}`);
-      if (ageParam) queryParams.push(`age=${ageParam}`);
-      if (genderParam) queryParams.push(`gender=${genderParam}`);
-      if (location) {
-        queryParams.push(
-          `latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&radius=${radius}`
-        );
-      }
-      
-      const queryString = queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
-      navigation.navigate("Home", { queryParams: queryString });
+    if (types.length > 0) queryParams.push(`type=${types.join(",")}`);
+    if (ageParam) queryParams.push(`age=${ageParam}`);
+    if (genderParam) queryParams.push(`gender=${genderParam}`);
+    if (location) {
+      queryParams.push(
+        `latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&radius=${radius}`
+      );
+    }
+
+    const queryString =
+      queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
+    navigation.navigate("Home", { queryParams: queryString });
   };
   //
   const toggleSearchParam = (param) => {
