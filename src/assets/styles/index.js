@@ -308,4 +308,20 @@ export default StyleSheet.create({
     color: "#333", // Dark text
     fontWeight: "bold",
   },
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#F8F8F8",
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  dropdownContainer: {
+    marginBottom: 15,
+  },
+
+
 });
