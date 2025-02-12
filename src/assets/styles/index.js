@@ -26,7 +26,7 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    marginBottom: 15, // Add spacing between arrows and pet card
+    marginBottom: 15,
     marginTop: 10,
   },
 
@@ -36,7 +36,8 @@ export default StyleSheet.create({
   },
 
   navText: {
-    fontSize: 16,
+    fontSize: 14,
+    fontFamily: "Times New Roman",
     fontWeight: "bold",
     color: "#444",
   },
@@ -59,8 +60,12 @@ export default StyleSheet.create({
   cardWrapper: {
     padding: 10,
     alignItems: "center",
-    marginTop: -85, // Moves pet card higher (reduce the gap)
-    marginBottom: 10, // Keeps space between pet card and buttons
+    marginTop: -55,
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
 
   cardContainer: {
@@ -73,57 +78,77 @@ export default StyleSheet.create({
     shadowRadius: 10,
     elevation: 10,
     alignItems: "center",
-    paddingBottom: 20,
+    height: 600,  // ✅ Ensures consistent card height
+    overflow: "hidden",  // ✅ Prevents content from spilling over
+    
   },
-
+  
+  // 🖼️ Make the pet image take the full height of the card
   petImageContainer: {
     width: "100%",
-    height: CARD_HEIGHT * 0.7,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    overflow: "hidden",
+    height: "100%", // ✅ Full height of the card
+    position: "absolute",
+    top: 0,
+    left: 0,
   },
-
+  
   petImage: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover",
+    resizeMode: "cover", // ✅ Ensures the image covers the entire card
   },
-
-  petInfoContainer: {
-    paddingVertical: 12,
-    paddingHorizontal: 18,
+  
+  // 🔥 Overlay should sit ON the image, not outside
+  overlayContainer: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    backgroundColor: "rgba(220, 180, 92, 0.6)", // ✅ Dark overlay
+    paddingVertical: 15,
+    paddingHorizontal: 10,
     alignItems: "center",
   },
-
+  
   petName: {
     fontSize: 24,
-    fontFamily: "Times New Roman",
     fontWeight: "bold",
-    color: "#363636",
-    marginBottom: 4,
+    fontFamily: "Times New Roman",
+    color: "white",
+    textAlign: "center",
   },
 
+  
   petInfo: {
     fontSize: 16,
     fontFamily: "Times New Roman",
-    color: "#666",
+    color: "white",
     textAlign: "center",
-    marginBottom: 2,
+    marginHorizontal: 5, // ✅ Adds space between elements in the row
+  },
+  petInfoRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10, // Adds spacing between elements
+    marginTop: 5,
   },
 
   petContact: {
     fontSize: 14,
     fontFamily: "Times New Roman",
-    color: "#FF6B6B",
+    color: "blue",
     textAlign: "center",
     marginTop: 5,
   },
 
   dotsContainer: {
+    position: "absolute",
+    top: 15, // ✅ Ensure it stays visible at the top
+    left: "50%", // ✅ Center it horizontally
+    transform: [{ translateX: -30 }], // ✅ Adjust for centering
     flexDirection: "row",
-    justifyContent: "center",
-    paddingVertical: 10,
+    alignSelf: "center",
+    zIndex: 5, // ✅ Ensure it appears above the image
   },
 
   dot: {
@@ -133,18 +158,153 @@ export default StyleSheet.create({
     marginHorizontal: 4,
     backgroundColor: "#D9D9D9",
   },
-  // Styles for SavedPets.js
+
   savedPetsTitle: {
     fontSize: 22,
+    fontFamily: "Times New Roman",
     fontWeight: "bold",
     textAlign: "center",
     marginVertical: 15,
     color: "#333",
   },
+  savedOverlayContainer: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    backgroundColor: "rgba(220, 180, 92, 0.6)", // Match HomeScreen overlay (golden transparent)
+    paddingVertical: 10,
+    alignItems: "center",
+  },
+
   savedPetsContainer: {
     paddingHorizontal: 16,
     paddingBottom: 20,
   },
+  savedPetImageContainer: {
+    width: "100%",
+    aspectRatio: 1, // ✅ Ensures square images (1:1 aspect ratio)
+    borderRadius: 10,
+    overflow: "hidden",
+    backgroundColor: "#e0e0e0", // ✅ Fallback background in case no image
+  },
+  
+
+  savedPetImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover", // ✅ Ensures full image visibility without distortion
+  },
+  
+
+  savedPetName: {
+    fontSize: 16,
+    fontFamily: "Times New Roman",
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "center",
+  },
+
+  innerSavedPetName: {
+    fontSize: 18,
+    fontFamily: "Times New Roman",
+    fontWeight: "bold",
+    color: "black",
+    textAlign: "center",
+    marginBottom: 5,
+  },
+  
+  imageWrapper: {
+    marginBottom: 15,
+    alignItems: "center",
+  },
+
+  modalPetImage: {
+    width: 250,
+    height: 250,
+    borderRadius: 10,
+  },
+
+  petDetails: {
+    fontSize: 16,
+    color: "#777",
+    marginBottom: 5,
+  },
+
+  petLocation: {
+    fontSize: 14,
+    color: "#777",
+    marginBottom: 5,
+  },
+
+  petEmail: {
+    fontSize: 14,
+    color: "#007AFF",
+    marginBottom: 0,
+  },
+
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    bottom: -65,
+    left: 0,
+    right: 0,
+  },
+
+  dismissButton: {
+    backgroundColor: "#d9534f",
+    padding: 12, // ✅ Reduce padding slightly
+    borderRadius: 50,
+    width: 60, // ✅ Reduce width
+    height: 60, // ✅ Reduce height
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 30,
+    bottom: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1,
+  },
+
+  saveButton: {
+    backgroundColor: "#facc15",
+    padding: 12, // ✅ Reduce padding slightly
+    borderRadius: 50,
+    width: 60, // ✅ Reduce width
+    height: 60, // ✅ Reduce height
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 30,
+    bottom: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 }, // ✅ Adjust shadow offset
+    shadowOpacity: 0.1, // ✅ Adjust shadow opacity
+    shadowRadius: 1, // ✅ Adjust shadow radius
+  },
+  
+
+  personalityTagsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    marginTop: 5,
+    maxWidth: "95%", // Prevents tags from overflowing
+  },
+
+  personalityTag: {
+    backgroundColor: "#FFD700",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    marginRight: 6,
+    marginBottom: 6,
+    fontSize: 14,
+    color: "#333",
+    fontWeight: "bold",
+  },
+  
   savedPetCard: {
     margin: 8,
     width: "46%",
@@ -157,19 +317,7 @@ export default StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
-  savedPetImage: {
-    width: "100%",
-    height: 170,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
-  savedPetName: {
-    textAlign: "center",
-    padding: 10,
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#444",
-  },
+  
 
   // Modal styles
   modalBackground: {
@@ -181,7 +329,9 @@ export default StyleSheet.create({
   modalContainer: {
     width: 320,
     padding: 20,
-    backgroundColor: "white",
+    backgroundColor: "rgba(245, 245, 245, 0.7)", // Light grayish-white (smokey)
+
+
     borderRadius: 10,
     alignItems: "center",
     shadowColor: "#000",
@@ -190,7 +340,7 @@ export default StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  imageWrapper: {
+  savedPetImageWrapper: {
     marginBottom: 15,
     alignItems: "center",
   },
@@ -199,35 +349,33 @@ export default StyleSheet.create({
     height: 250,
     borderRadius: 10,
   },
-  petInfoContainer: {
+  savedPetInfoContainer: {
     alignItems: "center",
     marginBottom: 15,
   },
-  petName: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 5,
-    color: "#333",
-  },
-  petDetails: {
+  savedPetDetails: {
     fontSize: 16,
-    color: "#777",
+    fontFamily: "Times New Roman",
+    color: "red", 
+    marginBottom: 5,
   },
-  petLocation: {
+  savedPetLocation: {
     fontSize: 14,
-    color: "#777",
+    fontFamily: "Times New Roman",
+    color: "black",
     marginBottom: 10,
   },
-  petEmail: {
+  savedPetEmail: {
     fontSize: 14,
     color: "#007AFF",
-    marginBottom: 15,
+    marginBottom: 1,
   },
   emailButton: {
     backgroundColor: "#F4C430",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 5,
+    marginBottom: 10,
   },
   emailButtonText: {
     color: "white",
@@ -245,83 +393,93 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    position: "absolute",
-    bottom: -98, // Moves buttons lower
-    left: 30,
-    right: 30,
-    marginBottom: 5,
-  },
-
-  dismissButton: {
-    backgroundColor: "#d9534f", // Red color for X button
-    padding: 15,
-    borderRadius: 50,
-    width: 70,
-    height: 70,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-    marginHorizontal: 40,
-    marginBottom: 20,
-  },
-
-  saveButton: {
-    backgroundColor: "#facc15", // Yellow color for Heart button
-    padding: 15,
-    borderRadius: 50,
-    width: 70,
-    height: 70,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-    marginHorizontal: 40,
-    marginBottom: 20,
-  },
-  personalityTagsContainer: {
-    flexDirection: "row",  // Display tags in a row
-    flexWrap: "wrap",      // Allow wrapping to next line if needed
-    justifyContent: "center",
-    marginTop: 5,
-    marginBottom: -30,
-  },
-  
-  personalityTag: {
-    backgroundColor: "#ffdead", // Soft yellow background
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-    marginRight: 6, // Space between tags
-    marginBottom: 6,
-    fontSize: 14,
-    color: "#333", // Dark text
-    fontWeight: "bold",
-  },
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#F8F8F8",
+  //Styles for dropdown container in SearchSettings.js
+  dropdownContainer: {
+    marginTop: 10,
+    marginBottom: 15,
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: "bold",
+    fontFamily: "Times New Roman",
     textAlign: "center",
-    marginBottom: 20,
-  },
-  dropdownContainer: {
     marginBottom: 15,
+    marginTop: 20,
   },
-
-
+  searchRadiusContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 12,
+    marginTop: 16,
+    marginLeft: 20,
+    marginRight: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  
+  searchRadiusText: {
+    flex: 1,
+    fontSize: 18,
+  },
+  
+  searchRadiusInput: {
+    borderWidth: 1,
+    borderColor: "#D1D5DB", // Gray-300
+    padding: 8,
+    borderRadius: 10,
+    fontSize: 16,
+  },
+  
+  updateSearchButton: {
+    backgroundColor: "#FACC15", // Yellow-400
+    padding: 12,
+    borderRadius: 10,
+    marginTop: 24,
+    alignItems: "center",
+    marginLeft: 20,
+    marginRight: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  
+  updateSearchButtonText: {
+    color: "black",
+    fontSize: 18,
+    fontWeight: "semibold",
+  },
+  
+  logoutButton: {
+    backgroundColor: "#EF4444", // Red-500
+    padding: 12,
+    borderRadius: 10,
+    marginTop: 24,
+    alignItems: "center",
+    marginLeft: 20,
+    marginRight: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  
+  logoutButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "semibold",
+  },
+  footer: {
+    alignContent: "center",
+    alignItems: "center",
+    marginTop: 80,
+  },
 });
