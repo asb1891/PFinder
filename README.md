@@ -5,54 +5,78 @@
 
 ![PetSwipe Logo](assets/PetSwipeLogo.png "PetSwipe Logo")
 
+# PetSwipe
 
+[🔗 Live Demo](https://andrewblumenthal.me/petswipe)
 
-## Overview
-
-PetSwipe is a mobile application designed to facilitate pet adoption. The app allows users to view profiles of pets in need of homes from various shelters and rescue groups. With a familiar swipe interface, users can swipe right to express interest in adopting a pet, saving the profile into a "Saved Pets" list, or swipe left if they wish to pass.
+PetSwipe is a mobile application that helps users find their ideal pet by swiping through available pets in their area. The app fetches pets from the **Petfinder API**, allows users to express interest by swiping right, and stores their selections in a PostgreSQL database. Additionally, it incorporates a **machine learning recommendation system** that suggests pets based on user preferences collected during sign-up.
 
 ## Features
+- 🔍 **Browse Pets** – Swipe through pets available for adoption in your area.
+- ❤️ **Save Favorites** – Right-swiped pets are stored for future reference.
+- 🏡 **Suggested Pets** – Machine learning-based pet recommendations based on user preferences.
+- 📍 **Location-Based Search** – Filters results based on user-defined distance.
+- 📩 **Contact Shelters** – Email pet shelters directly through the app.
+- 🔐 **User Authentication** – Secure login using Firebase Authentication.
+- 🔄 **Persistent Data** – Saved pets remain available even after restarting the app.
 
-- **Pet Profiles**: Each pet has a card displaying their picture, name, age, gender, and shelter contact information.
-- **Swipe Interface**: Users swipe right to save pets and left to pass.
-- **Saved Pets**: A list of pets the user is interested in for future reference.
-- **Home Screen**: The landing page where users can start swiping through pet profiles after logging in.
+## Tech Stack
+### Frontend
+- **React Native** (with Expo Go for testing)
+- **NativeWind** (for styling)
 
-## Technical Stack
+### Backend
+- **Node.js** (Express.js for API management)
+- **PostgreSQL** (for storing user data and saved pets)
+- **Firebase Authentication** (for secure user login)
 
-- **React Native**: For building the mobile application.
-- **Expo**: To facilitate the development process.
-- **React Navigation**: To handle navigation within the app, using both stack and bottom tab navigators.
-- **Swiper Component**: To enable the swipe functionality.
-- **Node.js**: For the backend server.
-- **Axios**: To make API requests to fetch pet data.
+### APIs
+- **Petfinder API** (fetches pet listings)
 
-## Setup and Running
+## Installation
+### Prerequisites
+Ensure you have the following installed:
+- Node.js & npm
+- Expo CLI
+- PostgreSQL
 
-1. Clone the repository.
-2. Run `npm install` to install dependencies.
-3. Start the app with `expo start`.
-4. The backend server expects a local server running on `http://localhost:4000/api/pets`.
+### Setup Instructions
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/your-username/petswipe.git
+   cd petswipe
+   ```
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+3. **Set up environment variables:**
+   Create a `.env` file in the root directory and add the following:
+   ```env
+   PETFINDER_API_KEY=your_petfinder_api_key
+   PETFINDER_API_SECRET=your_petfinder_api_secret
+   DATABASE_URL=your_postgresql_connection_string
+   FIREBASE_CONFIG=your_firebase_config
+   ```
+4. **Run the backend server:**
+   ```sh
+   npm run server
+   ```
+5. **Start the Expo app:**
+   ```sh
+   npm start
+   ```
 
-## How to Use
+## Usage
+- **Sign up** and complete the onboarding questionnaire.
+- **Swipe right** on pets you like; they will be saved to your favorites.
+- **View recommended pets** on the Suggested Pets page.
+- **Email shelters** directly from pet listings.
 
-1. Upon launching the app, users are greeted with a login screen.
-2. Once logged in, users are presented with the home screen populated with pet profiles.
-3. Users can swipe through the pet profiles.
-4. Swiping right saves the pet's profile into the "Saved Pets" tab accessible via the bottom tab navigator.
-5. Swiping left will simply move to the next pet profile.
-
-## Future Scope
-
-- **Extended Pet Details**: More information about the pets' characteristics and needs.
-- **User Profiles**: User account creation to save preferences and saved pets.
-- **Direct Messaging**: In-app messaging to communicate with shelters.
-
-## Contributions
-
-Contributions are welcome. Please fork the repository and submit a pull request with your features or fixes.
-
----
+## Future Enhancements
+- 📊 Improve ML model accuracy with more user feedback.
+- 🌎 Expand location-based search to support broader regions.
+- 🔄 Sync preferences dynamically with user interactions.
 
 This project is intended for educational purposes and aims to help increase the rate of pet adoptions through an easy-to-use mobile interface.
 
