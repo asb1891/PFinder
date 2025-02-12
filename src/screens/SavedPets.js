@@ -56,8 +56,15 @@ const SavedPets = () => {
         }}
         style={styles.savedPetCard}
       >
-        <Image source={{ uri: photoUri }} style={styles.savedPetImage} />
-        <Text style={styles.savedPetName}>{item.name || "Unknown Name"}</Text>
+        {/* Pet Image Container */}
+        <View style={styles.savedPetImageContainer}>
+          <Image source={{ uri: photoUri }} style={styles.savedPetImage} />
+  
+          {/* Overlay with Pet Name */}
+          <View style={styles.savedOverlayContainer}>
+            <Text style={styles.savedPetName}>{item.name || "Unknown Name"}</Text>
+          </View>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -109,7 +116,7 @@ const SavedPets = () => {
             <View style={styles.modalContainer}>
               <TouchableOpacity
                 onPress={handlePhotoChange}
-                style={styles.imageWrapper}
+                style={styles.savedPetImageWrapper}
               >
                 <Image
                   source={{ uri: selectedPet?.photo_urls?.[currentPhotoIndex] }}
@@ -118,17 +125,17 @@ const SavedPets = () => {
               </TouchableOpacity>
 
               {/* Pet Info */}
-              <View style={styles.petInfoContainer}>
-                <Text style={styles.petName}>{selectedPet.name}</Text>
-                <Text style={styles.petDetails}>
+              <View style={styles.savedPetInfoContainer}>
+                <Text style={styles.innerSavedPetName}>{selectedPet.name}</Text>
+                <Text style={styles.savedPetDetails}>
                   {selectedPet.age} • {selectedPet.gender}
                 </Text>
-                <Text style={styles.petLocation}>
+                <Text style={styles.savedPetLocation}>
                   {selectedPet.contact?.address?.city || "Unknown City"},
                   {selectedPet.contact?.address?.state || "Unknown State"}
                   {selectedPet.contact?.address?.postcode || ""}
                 </Text>
-                <Text style={styles.petEmail}>
+                <Text style={styles.savedPetEmail}>
                   {selectedPet.contact?.email || "No email available"}
                 </Text>
               </View>
