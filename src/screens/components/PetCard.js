@@ -104,7 +104,7 @@ const PetCard = ({ pet, onSwipeRight, onSwipeLeft }) => {
       </View>
 
       {/* Buttons below the card */}
-      <View style={styles.buttonContainer}>
+      {/* <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={onSwipeLeft} style={styles.dismissButton}>
           <Ionicons name="close" size={30} color="white" />
         </TouchableOpacity>
@@ -112,7 +112,7 @@ const PetCard = ({ pet, onSwipeRight, onSwipeLeft }) => {
         <TouchableOpacity onPress={onSwipeRight} style={styles.saveButton}>
           <Ionicons name="heart" size={30} color="white" />
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };
