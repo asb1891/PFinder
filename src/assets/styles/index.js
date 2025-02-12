@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions } from "react-native";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
-const CARD_HEIGHT = 520;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 export default StyleSheet.create({
   screenBackground: {
@@ -40,10 +40,12 @@ export default StyleSheet.create({
     fontFamily: "Times New Roman",
     fontWeight: "bold",
     color: "#444",
+    marginBottom: 5,
   },
 
   iconSpacing: {
     marginHorizontal: 8,
+    marginBottom: 5,
   },
 
   noPetsContainer: {
@@ -60,8 +62,8 @@ export default StyleSheet.create({
   cardWrapper: {
     padding: 10,
     alignItems: "center",
-    marginTop: -55,
-    marginBottom: 10,
+    marginTop: -90,
+    marginBottom: 10  ,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -70,6 +72,7 @@ export default StyleSheet.create({
 
   cardContainer: {
     width: SCREEN_WIDTH * 0.9,
+    height: SCREEN_HEIGHT * 0.6,
     borderRadius: 20,
     backgroundColor: "#faf9f6",
     shadowColor: "#000",
@@ -78,7 +81,7 @@ export default StyleSheet.create({
     shadowRadius: 10,
     elevation: 10,
     alignItems: "center",
-    height: 600,  // ✅ Ensures consistent card height
+    // height: 600,  // ✅ Ensures consistent card height
     overflow: "hidden",  // ✅ Prevents content from spilling over
     
   },
@@ -110,7 +113,7 @@ export default StyleSheet.create({
   },
   
   petName: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
     fontFamily: "Times New Roman",
     color: "white",
@@ -119,11 +122,12 @@ export default StyleSheet.create({
 
   
   petInfo: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: "Times New Roman",
     color: "white",
     textAlign: "center",
     marginHorizontal: 5, // ✅ Adds space between elements in the row
+    justifyContent: "center",
   },
   petInfoRow: {
     flexDirection: "row",
@@ -134,7 +138,7 @@ export default StyleSheet.create({
   },
 
   petContact: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: "Times New Roman",
     color: "blue",
     textAlign: "center",
@@ -244,12 +248,14 @@ export default StyleSheet.create({
 
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-evenly", // ✅ Ensures proper button spacing
     alignItems: "center",
     position: "absolute",
-    bottom: -65,
+    bottom: -10,  // ✅ Adjust position so it's below the Swiper
     left: 0,
     right: 0,
+    zIndex: 5,  // ✅ Ensures buttons are ABOVE the pet cards but NOT stacked with them
+    paddingVertical: 10, // ✅ Adds spacing to prevent merging effect
   },
 
   dismissButton: {
@@ -480,6 +486,6 @@ export default StyleSheet.create({
   footer: {
     alignContent: "center",
     alignItems: "center",
-    marginTop: 80,
+    marginTop: 20,
   },
 });
