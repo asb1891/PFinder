@@ -32,7 +32,7 @@ async function fetchAnimals(searchParams) {
     photos: animal.photos,
     contact: animal.contact,
     description: animal.description,
-    tags: animal.tags,
+    tags: animal.tags || [],
   }));
 }
 //Controller function to handle requests for pet data
@@ -81,23 +81,6 @@ export const getPets = async (req, res) => {
         location: `${latitude},${longitude}`,
       };
       
-      // let searchParams = {
-      //   page: page,
-      //   limit: limit,
-      //   type: type, // Pass single type here
-      //   name: req.query.name,
-      //   age: req.query.age,
-      //   gender: req.query.gender,
-      //   breed: req.query.breed,
-      //   size: req.query.size,
-      //   tags: req.query.tags,
-      //   species: req.query.species,
-      //   status: req.query.status,
-      //   color: req.query.color,
-      //   size: req.query.size,
-      //   distance: radius,
-      //   location: `${latitude},${longitude}`, // Pass the latitude and longitude as a single string
-      // };
       // Fetch animals for the current type
       const animals = await fetchAnimals(searchParams); // Fetch the animals for the current type
       allAnimals = allAnimals.concat(animals); // Accumulate the results
@@ -139,40 +122,32 @@ export const savePet = async (req, res) => {
       ON CONFLICT (pet_id) DO NOTHING;
     `;
 
-    // 🛠 FIX for PostgreSQL array formatting
-    const formattedPhotoUrls =
-      pet.photo_urls && pet.photo_urls.length > 0
-        ? `{${pet.photo_urls.map((url) => `"${url}"`).join(",")}}`
-        : "{}"; // ✅ Convert empty arrays to PostgreSQL-compatible format
+// Convert tags & photo_urls to valid JSON format
+const formattedTags = JSON.stringify(pet.tags || []);
+const formattedPhotoUrls = JSON.stringify(pet.photo_urls || []);
 
-    const formattedTags =
-      pet.tags && pet.tags.length > 0 // ✅ Check if tags exist
-        ? `{${pet.tags.map((tag) => `"${tag}"`).join(",")}}`
-        : "{}"; // ✅ Convert empty arrays to PostgreSQL-compatible format
+const values = [
+  pet.id,
+  pet.type,
+  pet.name,
+  pet.species,
+  pet.age,
+  pet.gender,
+  pet.description || null,
+  pet.status || null,
+  formattedTags,  // ✅ Save tags as JSON string
+  formattedPhotoUrls,  // ✅ Save photo_urls as JSON string
+  pet.contact?.email || null,
+  pet.contact?.phone || null,
+  pet.contact?.address?.address1 || null,
+  pet.contact?.address?.address2 || null,
+  pet.contact?.address?.city || null,
+  pet.contact?.address?.state || null,
+  pet.contact?.address?.postcode || null,
+  pet.contact?.address?.country || null,
+];
 
-   // Validate and sanitize the input data
-    const values = [
-      pet.id,
-      pet.type,
-      pet.name,
-      pet.species,
-      pet.age,
-      pet.gender,
-      pet.description || null,
-      pet.status || null,
-      formattedTags, // ✅ Fix for tags
-      formattedPhotoUrls, // ✅ Fix for photo_urls
-      pet.contact?.email || null,
-      pet.contact?.phone || null,
-      pet.contact?.address?.address1 || null,
-      pet.contact?.address?.address2 || null,
-      pet.contact?.address?.city || null,
-      pet.contact?.address?.state || null,
-      pet.contact?.address?.postcode || null,
-      pet.contact?.address?.country || null,
-    ];
-
-    await db.query(query, values);
+await db.query(query, values);
 
     console.log("Pet saved successfully:", pet.id);
     res.status(201).json({ message: "Pet saved successfully." });
