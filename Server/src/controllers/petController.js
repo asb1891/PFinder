@@ -73,21 +73,32 @@ export const getPets = async (req, res) => {
       let searchParams = {
         page: page,
         limit: limit,
-        type: type, // Pass single type here
-        name: req.query.name,
-        age: req.query.age,
-        gender: req.query.gender,
-        breed: req.query.breed,
-        size: req.query.size,
-        tags: req.query.tags,
-        species: req.query.species,
-        status: req.query.status,
-        color: req.query.color,
-        size: req.query.size,
+        type: type, // Search by type (Dog, Cat, etc.)
+        age: req.query.age ? req.query.age.split(",") : undefined, // Support multiple ages
+        gender: req.query.gender ? req.query.gender.split(",") : undefined, // Support multiple genders
+        size: req.query.size ? req.query.size.split(",") : undefined, // Support multiple sizes
         distance: radius,
-        location: `${latitude},${longitude}`, // Pass the latitude and longitude as a single string
+        location: `${latitude},${longitude}`,
       };
-
+      
+      // let searchParams = {
+      //   page: page,
+      //   limit: limit,
+      //   type: type, // Pass single type here
+      //   name: req.query.name,
+      //   age: req.query.age,
+      //   gender: req.query.gender,
+      //   breed: req.query.breed,
+      //   size: req.query.size,
+      //   tags: req.query.tags,
+      //   species: req.query.species,
+      //   status: req.query.status,
+      //   color: req.query.color,
+      //   size: req.query.size,
+      //   distance: radius,
+      //   location: `${latitude},${longitude}`, // Pass the latitude and longitude as a single string
+      // };
+      // Fetch animals for the current type
       const animals = await fetchAnimals(searchParams); // Fetch the animals for the current type
       allAnimals = allAnimals.concat(animals); // Accumulate the results
     }
@@ -103,10 +114,10 @@ export const getPets = async (req, res) => {
       .json({ error: error.response ? error.response.data : error.message });
   }
 };
-
+//Controller function to handle requests for pet data
 export const savePet = async (req, res) => {
   try {
-    const pet = req.body;
+    const pet = req.body; // Get the pet data from the request body
     console.log("Received pet data:", pet);
 
     // Check if pet already exists
@@ -135,10 +146,11 @@ export const savePet = async (req, res) => {
         : "{}"; // ✅ Convert empty arrays to PostgreSQL-compatible format
 
     const formattedTags =
-      pet.tags && pet.tags.length > 0
+      pet.tags && pet.tags.length > 0 // ✅ Check if tags exist
         ? `{${pet.tags.map((tag) => `"${tag}"`).join(",")}}`
         : "{}"; // ✅ Convert empty arrays to PostgreSQL-compatible format
 
+   // Validate and sanitize the input data
     const values = [
       pet.id,
       pet.type,
