@@ -1,12 +1,12 @@
 module.exports = {
   content: [
-    "./src/components/**/*.{js,jsx,ts,tsx}", // Include all files in components directory
-    "./src/screens/**/*.{js,jsx,ts,tsx}", // Include all files in screens directory
-    "./App.js" // Include your main App.js file
+    "./App.{js,jsx,ts,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./screens/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
     extend: {},
   },
   plugins: [],
-}
-
+};
