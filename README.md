@@ -70,7 +70,6 @@ Ensure you have the following installed:
 ## Usage
 - **Sign up** and complete the onboarding questionnaire.
 - **Swipe right** on pets you like; they will be saved to your favorites.
-- **View recommended pets** on the Suggested Pets page.
 - **Email shelters** directly from pet listings.
 
 ## Future Enhancements
