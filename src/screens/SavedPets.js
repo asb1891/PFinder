@@ -5,12 +5,10 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  ScrollView,
   Modal,
-  StyleSheet,
-  Button,
   Linking,
   Alert,
+  Platform
 } from "react-native";
 import { usePets } from "../../PetsContext";
 import styles from "../assets/styles";
@@ -70,25 +68,38 @@ const SavedPets = () => {
   };
 
   //function to send email via the saved pets card
-  //linking to the default email client
   const sendEmail = () => {
-    const email = selectedPet.contact_email; //get the email from the selected pet api
-    const subject = `Inquiry about ${selectedPet.name}`; //get the subject of the email
-    //custom email body
+    console.log("Selected Pet Data:", selectedPet); // Debugging: Log the entire pet object
+  
+    // Try different key names
+    const email = selectedPet?.contact_email || selectedPet?.contact?.email;
+  
+    if (!email) {
+      Alert.alert("Error", "No email address available for this pet.");
+      return;
+    }
+  
+    const subject = `Inquiry about ${selectedPet.name}`;
     const body = `Hello,\n\nI am interested in learning more about ${selectedPet.name}. Could you please provide more details?\n\nThank you!`;
-    //create the email url
-    const mailto = `mailto:${email}?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body)}`;
-    //check if the email client can be opened
+  
+    // Default mailto link
+    const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  
+    // Open Gmail if available
+    const gmailURL = `googlegmail://co?to=${email}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  
     Linking.canOpenURL(mailto)
       .then((supported) => {
-        //check if the email client can be opened
-        if (!supported) {
-          //if the email client can't be opened
-          Alert.alert("Error", "Email client is not available");
+        if (supported) {
+          return Linking.openURL(mailto); // Try opening default mail client first
         } else {
-          return Linking.openURL(mailto); //if the email client can be opened, open the email client
+          return Linking.canOpenURL(gmailURL).then((gmailSupported) => {
+            if (gmailSupported) {
+              return Linking.openURL(gmailURL); // Open Gmail app
+            } else {
+              Alert.alert("Error", "No email client available. Please configure an email app.");
+            }
+          });
         }
       })
       .catch((err) => console.error("Error opening email client", err));
