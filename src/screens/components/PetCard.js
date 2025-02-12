@@ -40,69 +40,81 @@ const PetCard = ({ pet, onSwipeRight, onSwipeLeft }) => {
 
   return (
     <View style={styles.cardWrapper}>
-      {/* Pet Card */}
       <View style={styles.cardContainer}>
-        {/* Image */}
+        {/* Full-screen image */}
         <TouchableOpacity
-          onPress={handlePhotoChange}
-          activeOpacity={0.8}
-          style={styles.petImageContainer}
-        >
-          <Image
-            source={{
-              uri: pet.photo_urls?.[currentPhotoIndex] || "https://via.placeholder.com/350",
-            }}
-            style={styles.petImage}
-          />
-        </TouchableOpacity>
-  
-        {/* Dots Indicator */}
-        <View style={styles.dotsContainer}>
-          {(pet.photo_urls || []).map((_, index) => (
-            <View
-              key={index}
-              style={[
-                styles.dot,
-                { backgroundColor: index === currentPhotoIndex ? "#FF6B6B" : "#D9D9D9" },
-              ]}
-            />
-          ))}
-        </View>
-  
-        {/* Pet Details */}
-        <View style={styles.petInfoContainer}>
-          <Text style={styles.petName}>{pet.name}</Text>
-          <Text style={styles.petInfo}>🐾 Age: {pet.age}</Text>
-          <Text style={styles.petInfo}>🧑‍🦰 Gender: {pet.gender}</Text>
-          <Text style={styles.petInfo}>📍 {pet.contact.address.city}, {pet.contact.address.state}</Text>
-          <Text style={styles.petContact}>✉️ {pet.contact.email}</Text>
-          
-          {/* Personality Tags */}
-          <View style={styles.personalityTagsContainer}>
-            {pet.tags && pet.tags.length > 0 ? (
-              pet.tags.map((tag, index) => (
-                <Text key={index} style={styles.personalityTag}>{tag}</Text>
-              ))
-            ) : (
-              <Text style={styles.personalityTag}>No personality traits listed</Text>
-            )}
-          </View>
-        </View>
+  onPress={() =>
+    setCurrentPhotoIndex((prev) => (prev + 1) % pet.photo_urls.length)
+  }
+  activeOpacity={0.8}
+  style={styles.petImageContainer}
+>
+  {/* Dots Indicator at the Top */}
+  <View style={styles.dotsContainer}>
+    {pet.photo_urls &&
+      pet.photo_urls.length > 1 &&
+      pet.photo_urls.map((_, index) => (
+        <View
+          key={index}
+          style={[
+            styles.dot,
+            { backgroundColor: index === currentPhotoIndex ? "#FF6B6B" : "#D9D9D9" },
+          ]}
+        />
+      ))}
+  </View>
+
+  {/* Pet Image */}
+  <Image
+    source={{
+      uri:
+        pet.photo_urls?.[currentPhotoIndex] ||
+        "https://via.placeholder.com/350",
+    }}
+    style={styles.petImage}
+  />
+</TouchableOpacity>
+
+{/* Pet Details with Compact Layout */}
+<View style={styles.overlayContainer}>
+  <Text style={styles.petName}>{pet.name}</Text>
+
+  {/* Compact Info Row */}
+  <View style={styles.petInfoRow}>
+    <Text style={styles.petInfo}>🐾 {pet.age}</Text>
+    <Text style={styles.petInfo}>🧑‍🦰 {pet.gender}</Text>
+    <Text style={styles.petInfo}>📍 {pet.contact.address.city}, {pet.contact.address.state}</Text>
+  </View>
+
+  {/* Contact Email */}
+  <Text style={styles.petContact}>✉️ {pet.contact.email}</Text>
+
+  {/* Personality Tags */}
+  {/* <View style={styles.personalityTagsContainer}>
+    {pet.tags && pet.tags.length > 0 ? (
+      pet.tags.map((tag, index) => (
+        <Text key={index} style={styles.personalityTag}>{tag}</Text>
+      ))
+    ) : (
+      <Text style={styles.personalityTag}>No personality traits listed</Text>
+    )}
+  </View> */}
+</View>
+
       </View>
-  
-      {/* Buttons - placed **below** the card */}
+
+      {/* Buttons below the card */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={onSwipeLeft} style={styles.dismissButton}>
-          <Ionicons name="close" size={40} color="white" />
+          <Ionicons name="close" size={30} color="white" />
         </TouchableOpacity>
-        
+
         <TouchableOpacity onPress={onSwipeRight} style={styles.saveButton}>
-          <Ionicons name="heart" size={40} color="white" />
+          <Ionicons name="heart" size={30} color="white" />
         </TouchableOpacity>
       </View>
     </View>
   );
-  
 };
 
 export default PetCard;
