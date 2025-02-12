@@ -40,8 +40,28 @@ export const saveSwipedPet = async (pet) => {
 // Retrieve all saved pets from the database
 export const getSavedPets = async () => {
   const query = `
-        SELECT * FROM pets
-        ORDER BY created_at DESC;
+        SELECT 
+    pet_id,
+    type,
+    name,
+    species,
+    age,
+    gender,
+    description,
+    status,
+    tags::jsonb, -- ✅ Convert TEXT[] to JSONB
+    photo_urls::jsonb, -- ✅ Convert TEXT[] to JSONB
+    contact_email,
+    contact_phone,
+    contact_address1,
+    contact_address2,
+    contact_city,
+    contact_state,
+    contact_postcode,
+    contact_country
+FROM pets;
+
+
     `;
   const result = await db.query(query); // Map the rows to objects and trim the photo URLs (if any)
   return result.rows.map((pet) => ({
