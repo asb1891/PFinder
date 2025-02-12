@@ -2,7 +2,8 @@ import React, { useRef } from "react";
 import Swiper from "react-native-deck-swiper";
 import { usePets } from "../../../PetsContext";
 import PetCard from "./PetCard";
-import { View } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
+import styles from "../../assets/styles";
 
 const PetSwiper = ({ pets }) => {
   const { handleSavePet } = usePets();
@@ -33,28 +34,39 @@ const PetSwiper = ({ pets }) => {
   };
 
   return (
-    <View>
-      <Swiper
-        ref={swiperRef}
-        cards={pets}
-        renderCard={(card, cardIndex) =>
-          card ? (
-            <PetCard
-              key={card.id}
-              pet={card}
-              onSwipeRight={handleManualSwipeRight} // Only triggers manual swipe, no state changes
-              onSwipeLeft={handleManualSwipeLeft}
-            />
-          ) : null
-        }
-        onSwipedRight={handleRightSwipe} // Saves pet when swiped right
-        onSwipedLeft={handleLeftSwipe}
-        cardIndex={0}
-        backgroundColor={"white"}
-        stackSize={1}
-      />
+  <View style={{ flex: 1, justifyContent: "space-between" }}>
+    <Swiper
+      ref={swiperRef}
+      cards={pets}
+      renderCard={(card, cardIndex) =>
+        card ? (
+          <PetCard
+            key={card.id}
+            pet={card}
+            onSwipeRight={handleManualSwipeRight}
+            onSwipeLeft={handleManualSwipeLeft}
+          />
+        ) : null
+      }
+      onSwipedRight={handleRightSwipe}
+      onSwipedLeft={handleLeftSwipe}
+      backgroundColor="transparent"
+      cardIndex={0}
+      stackSize={5}
+      containerStyle={{ marginBottom: 100 }} // ✅ Moves cards up to separate them from buttons
+    />
+
+    {/* Swipe Buttons Container */}
+    <View style={styles.buttonContainer}>
+      <TouchableOpacity onPress={handleManualSwipeLeft} style={styles.dismissButton}>
+        <Text>❌</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={handleManualSwipeRight} style={styles.saveButton}>
+        <Text>💛</Text>
+      </TouchableOpacity>
     </View>
-  );
+  </View>
+);
 };
 
 export default PetSwiper;
