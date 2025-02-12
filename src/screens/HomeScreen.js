@@ -31,7 +31,7 @@ const HomeScreen = ({ navigation, route }) => {
         photo_urls: pet.photos ? pet.photos.map((photo) => photo.full) : [], // Convert `photos` to `photo_urls`
       }));
 
-      console.log("Formatted Pets Data:", formattedPets);
+      // console.log("Formatted Pets Data:", formattedPets);
 
       setPets((prevPets) =>
         pageNumber === 1 ? formattedPets : [...prevPets, ...formattedPets]
@@ -73,10 +73,10 @@ const HomeScreen = ({ navigation, route }) => {
           <View style={styles.headerContainer}>
             <View style={styles.navButton}>
               <Ionicons name="arrow-back" size={20} color="red" style={styles.iconSpacing} />
-              <Text style={styles.navText}>Left For Next</Text>
+              <Text style={styles.navText}>Swipe Left For Next</Text>
             </View>
             <View style={styles.navButton}>
-              <Text style={styles.navText}>Right To Save</Text>
+              <Text style={styles.navText}>Swipe Right To Save</Text>
               <Ionicons name="arrow-forward" size={20} color="green" style={styles.iconSpacing} />
             </View>
           </View>
