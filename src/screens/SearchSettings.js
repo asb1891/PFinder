@@ -177,144 +177,30 @@ const SearchSettings = () => {
           zIndexInverse={3000}
         />
       </View>
-      <View className="flex-row items-center p-3 mt-4 bg-white rounded-lg shadow">
-        <Text className="flex-1 text-lg">Search Radius (miles):</Text>
-        <TextInput
-          className="border border-gray-300 p-2 rounded-lg"
-          value={radius}
-          onChangeText={setRadius}
-          keyboardType="numeric"
-        />
-      </View>
-      <TouchableOpacity
-        onPress={handleSearch}
-        className="bg-yellow-400 p-3 rounded-lg mt-6 items-center"
-      >
-        <Text className="text-black text-lg">Update Search Filter</Text>
-      </TouchableOpacity>
-      <View>
-        <TouchableOpacity
-          onPress={handleLogout}
-          className="bg-red-500 p-3 rounded-lg mt-6 items-center"
-        >
-          <Text className="text-white text-lg">Logout</Text>
-        </TouchableOpacity>
-      </View>
+      <View style={styles.searchRadiusContainer}>
+  <Text style={styles.searchRadiusText}>Search Radius (miles):</Text>
+  <TextInput
+    style={styles.searchRadiusInput}
+    value={radius}
+    onChangeText={setRadius}
+    keyboardType="numeric"
+  />
+</View>
+
+<TouchableOpacity onPress={handleSearch} style={styles.updateSearchButton}>
+  <Text style={styles.updateSearchButtonText}>Update Search Filter</Text>
+</TouchableOpacity>
+
+<View>
+  <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+    <Text style={styles.logoutButtonText}>Logout</Text>
+  </TouchableOpacity>
+  <View style={styles.footer}>
+    <Icon name="paw" size={100} color="#FACC15" />
+  </View>
+</View>
     </KeyboardAvoidingView>
   );
 };
 
 export default SearchSettings;
-//   return (
-//     <View className="flex-1 bg-white p-5">
-//       {/* Dogs */}
-//       <TouchableOpacity
-//         onPress={() => toggleSearchParam("Dog")}
-//         className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
-//       >
-//         <FontAwesome5 name="dog" size={20} color="#4B5563" className="mr-2" />
-//         <Text className="flex-1 text-lg"> Dog</Text>
-//         <View
-//           className={`w-5 h-5 rounded-full ${
-//             searchParams.Dog ? "bg-yellow-400" : "bg-transparent"
-//           } border border-yellow-400`}
-//         />
-//       </TouchableOpacity>
-//       {/* Cats */}
-//       <TouchableOpacity
-//         onPress={() => toggleSearchParam("Cat")}
-//         className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
-//       >
-//         <FontAwesome5 name="cat" size={20} color="#4B5563" className="mr-2" />
-//         <Text className="flex-1 text-lg"> Cat</Text>
-//         <View
-//           className={`w-5 h-5 rounded-full ${
-//             searchParams.Cat ? "bg-yellow-400" : "bg-transparent"
-//           } border border-yellow-400`}
-//         />
-//       </TouchableOpacity>
-//       {/* Birds */}
-//       <TouchableOpacity
-//         onPress={() => toggleSearchParam("Bird")}
-//         className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
-//       >
-//         <FontAwesome
-//           name="twitter"
-//           size={20}
-//           color="#4B5563"
-//           className="mr-2"
-//         />
-//         <Text className="flex-1 text-lg"> Bird</Text>
-//         <View
-//           className={`w-5 h-5 rounded-full ${
-//             searchParams.Bird ? "bg-yellow-400" : "bg-transparent"
-//           } border border-yellow-400`}
-//         />
-//       </TouchableOpacity>
-//       <TouchableOpacity
-//         onPress={() => toggleSearchParam("Rabbit")}
-//         className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
-//       >
-//         <FontAwesome5 name="paw" size={20} color="#4B5563" className="mr-2" />
-//         <Text className="flex-1 text-lg"> Rabbit</Text>
-//         <View
-//           className={`w-5 h-5 rounded-full ${
-//             searchParams.Rabbit ? "bg-yellow-400" : "bg-transparent"
-//           } border border-yellow-400`}
-//         />
-//       </TouchableOpacity>
-//       {/* Male */}
-//       <TouchableOpacity
-//         onPress={() => toggleSearchParam("Male")}
-//         className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
-//       >
-//         <Icon name="male" size={20} color="#4B5563" className="mr-2" />
-//         <Text className="flex-1 text-lg"> Male</Text>
-//         <View
-//           className={`w-5 h-5 rounded-full ${
-//             searchParams.Male ? "bg-yellow-400" : "bg-transparent"
-//           } border border-yellow-400`}
-//         />
-//       </TouchableOpacity>
-//       {/* Female */}
-//       <TouchableOpacity
-//         onPress={() => toggleSearchParam("Female")}
-//         className="flex-row items-center p-3 mb-2 bg-white rounded-lg shadow"
-//       >
-//         <Icon name="female" size={20} color="#4B5563" className="mr-2" />
-//         <Text className="flex-1 text-lg"> Female</Text>
-//         <View
-//           className={`w-5 h-5 rounded-full ${
-//             searchParams.Female ? "bg-yellow-400" : "bg-transparent"
-//           } border border-yellow-400`}
-//         />
-//       </TouchableOpacity>
-//       {/* Search Radius */}
-// <View className="flex-row items-center p-3 mt-4 bg-white rounded-lg shadow">
-//   <Text className="flex-1 text-lg">Search Radius (miles):</Text>
-//   <TextInput
-//     className="border border-gray-300 p-2 rounded-lg"
-//     value={radius}
-//     onChangeText={setRadius}
-//     keyboardType="numeric"
-//   />
-// </View>
-// <TouchableOpacity
-//   onPress={handleSearch}
-//   className="bg-yellow-400 p-3 rounded-lg mt-6 items-center"
-// >
-//   <Text className="text-black text-lg">Update Search Filter</Text>
-// </TouchableOpacity>
-// <View>
-//   <TouchableOpacity
-//     onPress={handleLogout}
-//     className="bg-red-500 p-3 rounded-lg mt-6 items-center"
-//   >
-//     <Text className="text-white text-lg">Logout</Text>
-//   </TouchableOpacity>
-// </View>
-//     </View>
-//   );
-// };
-
-// export default SearchSettings;
